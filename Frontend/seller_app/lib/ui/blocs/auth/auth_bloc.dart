@@ -16,12 +16,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _loginAuth(LoginAuth event, Emitter<AuthState> emit) async{
-    print('here');
     Object object = await Api.login(event.username, event.password);
     if(object is Success){
-      print("success: $object");
-    }else {
-     print("failure: $object");
+      print(object.body);
+      emit(LoginSuccess());
+    }else if(object is Failure){
+     print("failure: ${object.statusCode}");
     }
   }
 }

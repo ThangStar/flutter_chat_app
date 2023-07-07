@@ -7,7 +7,8 @@ class Api {
   static Future<Object> login(String username, String password) async {
     try {
       Response res = await Http().dio.post(ApiPath.login,
-          data: {'username': username, 'password': password});
+          data: {"username": username, "password": password});
+
       if (res.statusCode == 200) {
         return Success(statusCode: 200, body: res.data);
       }
@@ -19,8 +20,19 @@ class Api {
     } catch (err) {
       print('error ${err}');
       return Failure(message: err.toString());
-    } finally {
-      return Failure();
+    }
+  }
+
+  static Future<Object> getAllMessageOfUser(String myId) async {
+    try {
+      Response res =
+          await Http().dio.get(ApiPath.messageOfUser, data: {"myId": myId});
+      if (res.statusCode == 200) {
+        return Success(statusCode: 200, body: res.data);
+      }
+      return Failure(message: res.statusMessage.toString(), body: res.data);
+    } catch (err) {
+      return Failure(message: err.toString());
     }
   }
 }

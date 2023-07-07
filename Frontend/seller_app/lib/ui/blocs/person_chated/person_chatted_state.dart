@@ -1,10 +1,10 @@
-part of 'person_chated_bloc.dart';
+part of 'person_chatted_bloc.dart';
 
-abstract class PersonChatedState extends Equatable {
-  const PersonChatedState();
+abstract class PersonChattedState extends Equatable {
+  const PersonChattedState();
 }
 
-class PersonChatedInitial extends PersonChatedState {
+class PersonChattedInitial extends PersonChattedState {
   @override
   List<Object> get props => [];
 }

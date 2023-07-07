@@ -1,3 +1,4 @@
+import 'package:seller_app/constants/constants.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -6,7 +7,7 @@ class SocketInstance {
 
   SocketInstance() {
     socket = IO.io(
-        'http://192.168.1.16:3001',
+        Constants.SOCKET_URL,
         OptionBuilder().setTransports(['websocket']).setQuery(
             {'username': 'username'}).build());
   }

@@ -9,5 +9,5 @@ abstract class MessageEvent extends Equatable {
 class HandleActionSend extends MessageEvent{
   final String txtMessage;
 
-  HandleActionSend({required this.txtMessage});
+  const HandleActionSend({required this.txtMessage});
 }

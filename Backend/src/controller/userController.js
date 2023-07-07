@@ -1,4 +1,4 @@
-const toJson = require("../../utils/ToJson");
+const toJson = require("./../utils/ToJson");
 const conn = require("../API/mySql.api")
 
 
@@ -6,7 +6,7 @@ const getAllUser = (req, res) => {
      const page = parseInt(req.query._page);
      const perpage = parseInt(req.query._perpage);
 
-     const queryString = `SELECT * FROM USER LIMIT ${perpage * page - perpage}, ${perpage}`
+     const queryString = `SELECT * FROM USERS LIMIT ${perpage * page - perpage}, ${perpage}`
      console.log("queryString: ", queryString);
 
      if (page && perpage) {
@@ -14,8 +14,9 @@ const getAllUser = (req, res) => {
                res.send(rs)
           })
      } else {
-          conn.query('SELECT * FROM USER', (err, rs, field) => {
-               res.send(rs)
+          conn.query('SELECT * FROM USERS', (err, rs, field) => {
+               console.log(err);
+               res.send(toJson(rs))
           })
      }
 }
@@ -52,26 +53,25 @@ const addUser = (req, res) => {
 
 }
 const login = (req, res) => {
-     const username = req.query.username;
-     const password = req.query.password;
-
+     const username = req.body.username;
+     const password = req.body.password;
+     console.log('query login: ', req.body);
      const queryString = `SELECT * FROM USERS WHERE USERNAME = ? AND PASSWORD = ?`
      conn.query(queryString, [username, password], (err, rs, field) => {
           if (err) {
                res.send(toJson({
                     status: false,
-                    message: 'login failure err '+err.message
+                    message: 'login failure err ' + err.message
                }))
           } else {
-               console.log(rs);
-               if(rs.length === 1){
+               if (rs.length === 1) {
                     res.status(200)
                     res.send(toJson({
                          status: true,
                          message: 'login success',
                          profile: rs[0]
                     }))
-               }else {
+               } else {
                     res.send(toJson({
                          status: false,
                          message: 'wrong username or password!'

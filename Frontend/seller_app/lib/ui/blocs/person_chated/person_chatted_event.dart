@@ -1,15 +1,15 @@
-part of 'person_chated_bloc.dart';
+part of 'person_chatted_bloc.dart';
 
-abstract class PersonChatedEvent extends Equatable {
-  const PersonChatedEvent();
+abstract class PersonChattedEvent extends Equatable {
+  const PersonChattedEvent();
 
   @override
   // TODO: implement props
   List<Object?> get props => [];
 }
 
-class InitPersonChated extends PersonChatedEvent {
+class InitPersonChatted extends PersonChattedEvent {
   final String myId;
 
-  const InitPersonChated({required this.myId});
+  const InitPersonChatted({required this.myId});
 }

@@ -13,3 +13,4 @@ class LoginAuth extends AuthEvent{
   LoginAuth({required this.username, required this.password});
 }
 
+

@@ -4,6 +4,8 @@ const userRouter = require('./src/router/user/user.router')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const courseRouter = require('./src/router/course/course.router')
+const messageRouter = require('./src/router/message/message.router')
+
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -21,7 +23,8 @@ app.listen(3000, () => {
      console.log('server listen at port: 3000');
 })
 
-// app.use(cookieParser())
-// app.use('/user', userRouter)
-// app.use('/course', courseRouter)
+app.use(cookieParser())
+app.use('/user', userRouter)
+app.use('/course', courseRouter)
+app.use('/messages', messageRouter)
 

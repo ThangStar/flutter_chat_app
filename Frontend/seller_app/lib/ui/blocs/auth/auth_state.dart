@@ -8,3 +8,8 @@ class AuthInitial extends AuthState {
   @override
   List<Object> get props => [];
 }
+
+class LoginSuccess extends AuthInitial{
+
+
+}
