@@ -72,6 +72,7 @@ const login = (req, res) => {
                          profile: rs[0]
                     }))
                } else {
+                    res.status(400)
                     res.send(toJson({
                          status: false,
                          message: 'wrong username or password!'

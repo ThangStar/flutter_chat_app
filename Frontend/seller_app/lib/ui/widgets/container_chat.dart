@@ -5,7 +5,6 @@ class ContainerChat extends StatelessWidget {
   const ContainerChat({super.key, required this.handleActionSend});
 
   final Function(String) handleActionSend;
-
   @override
   Widget build(BuildContext context) {
     TextEditingController messageController = TextEditingController();

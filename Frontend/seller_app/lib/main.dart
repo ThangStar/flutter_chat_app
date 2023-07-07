@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
+import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AuthBloc(),
+        ),
+        BlocProvider(
+          create: (context) => PersonChattedBloc(),
         ),
       ],
       child: MaterialApp(

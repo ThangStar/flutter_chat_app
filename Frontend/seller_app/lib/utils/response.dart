@@ -1,12 +1,12 @@
 class Success{
-  final Object? body;
+  final String body;
   final int statusCode;
 
-  Success({this.body, this.statusCode = 200});
+  Success({required this.body, this.statusCode = 200});
 }
 
 class Failure {
-  final Object? body;
+  final String? body;
   final int statusCode;
   final String message;
 

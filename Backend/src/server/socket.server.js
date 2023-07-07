@@ -5,10 +5,14 @@ module.exports = {
      start: function (io) {
           io.on('connection', socket => {
                const { id } = socket
-               users.push({
-                    id: socket.id
-               })
-
+               const idDbUser = socket.handshake.query.myId;
+               console.log("MYID: ", idDbUser);
+               if(idDbUser != 0){
+                    users.push({
+                         idSocket: socket.id,
+                         idDb: idDbUser
+                    })
+               }
                console.log(`online: `, users);
 
                socket.on('messageFromClient', (data) => {
@@ -21,8 +25,11 @@ module.exports = {
                     console.log(message);
                     // insertMessage(message)
                     // socket.broadcast.emit("messageFromServer", data)
-                    console.log(JSON.stringify(data));
-                    io.to(socket.id).emit('messageFromServer', data)
+                    console.log(data.idUserGet);
+                    // users.find
+                    
+                    // io.to(socket.id).emit('messageFromServer', data)
+
                })
                socket.on('disconnect', () => {
                     users = users.filter(e => {

@@ -23,10 +23,10 @@ class Api {
     }
   }
 
-  static Future<Object> getAllMessageOfUser(String myId) async {
+  static Future<Object> getAllMessageOfUser(int myId) async {
     try {
       Response res =
-          await Http().dio.get(ApiPath.messageOfUser, data: {"myId": myId});
+          await Http().dio.get(ApiPath.messageOfUser, queryParameters: {"myId": myId});
       if (res.statusCode == 200) {
         return Success(statusCode: 200, body: res.data);
       }

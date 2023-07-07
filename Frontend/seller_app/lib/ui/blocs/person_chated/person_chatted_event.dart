@@ -9,7 +9,4 @@ abstract class PersonChattedEvent extends Equatable {
 }
 
 class InitPersonChatted extends PersonChattedEvent {
-  final String myId;
-
-  const InitPersonChatted({required this.myId});
 }

@@ -1,10 +1,10 @@
 part of 'message_bloc.dart';
 
-abstract class MessageState extends Equatable {
-  const MessageState();
-}
+class MessageState extends Equatable {
+  final List<Message> messages;
 
-class MessageInitial extends MessageState {
+  const MessageState({this.messages = const []});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [messages];
 }

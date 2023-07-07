@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/model/person_chatted.dart';
+import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 
@@ -13,47 +15,9 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<MessageScreen> {
+  late PersonChattedBloc _chattedBloc;
   List<PersonChatted> persons = [
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p'),
-    PersonChatted(
-        avatar: "",
-        username: 'username',
-        finalMessage: 'hello',
-        dateTime: '12h30p')
+    PersonChatted(id: 1, message: "1", username: "2", dateTime: "2")
   ];
 
   _newChat() {
@@ -63,6 +27,8 @@ class _ChatScreenState extends State<MessageScreen> {
   @override
   void initState() {
     super.initState();
+    _chattedBloc = BlocProvider.of<PersonChattedBloc>(context);
+    _chattedBloc.add(InitPersonChatted());
   }
 
   @override
@@ -98,16 +64,16 @@ class _ChatScreenState extends State<MessageScreen> {
         primary: true,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 18,
             ),
-            nearUserChated(),
+            const NearUserChatted(),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               child:
                   Divider(color: colorScheme(context).scrim.withOpacity(0.1)),
             ),
-            chatContent(persons)
+            const ChatContent()
           ],
         ),
       ),
@@ -115,74 +81,99 @@ class _ChatScreenState extends State<MessageScreen> {
   }
 }
 
-Widget chatContent(List<PersonChatted> persons) {
-  return ListView.separated(
-      shrinkWrap: true,
-      primary: false,
-      itemBuilder: (context, index) {
-        PersonChatted person = persons[index];
-        return ListTile(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatScreen(),
-                ));
-          },
-          trailing: Text(
-            person.dateTime,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: colorScheme(context).scrim.withOpacity(0.6)),
-          ),
-          leading: Image.asset(
-            width: 62,
-            height: 62,
-            'assets/images/avatar.png',
-          ),
-          title: Text(
-            person.username,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(fontWeight: FontWeight.bold, fontSize: 17),
-          ),
-          subtitle: Text(
-            person.finalMessage,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: colorScheme(context).scrim.withOpacity(0.6)),
-          ),
-        );
-      },
-      separatorBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(color: colorScheme(context).scrim.withOpacity(0.1)),
-          ),
-      itemCount: persons.length);
+class ChatContent extends StatefulWidget {
+  const ChatContent({super.key});
+
+  @override
+  State<ChatContent> createState() => _ChatContentState();
 }
 
-Widget nearUserChated() {
-  return Container(
-    height: 120,
-    child: ListView.separated(
-      itemCount: 12,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) => Row(
-        children: [
-          SizedBox(
-            width: 18,
-          ),
-          avatarMessage(context),
-        ],
+class _ChatContentState extends State<ChatContent> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: BlocBuilder<PersonChattedBloc, PersonChattedState>(
+        builder: (context, state) {
+          return ListView.separated(
+              shrinkWrap: true,
+              primary: false,
+              itemBuilder: (context, index) {
+                PersonChatted person = state.persons[index];
+                return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(idUserChatting: person.id, fullNameUserChatting: person.username),
+                        ));
+                  },
+                  trailing: Text(
+                    person.dateTime,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: colorScheme(context).scrim.withOpacity(0.6)),
+                  ),
+                  leading: Image.asset(
+                    width: 62,
+                    height: 62,
+                    'assets/images/avatar.png',
+                  ),
+                  title: Text(
+                    person.username,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+                  subtitle: Text(
+                    person.message,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: colorScheme(context).scrim.withOpacity(0.6)),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Divider(
+                        color: colorScheme(context).scrim.withOpacity(0.1)),
+                  ),
+              itemCount: state.persons.length);
+        },
       ),
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(
-          width: 18,
-        );
-      },
-    ),
-  );
+    );
+    ;
+  }
+}
+
+class NearUserChatted extends StatelessWidget {
+  const NearUserChatted({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 120,
+      child: BlocBuilder<PersonChattedBloc, PersonChattedState>(
+        builder: (context, state) {
+          return ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(
+                  width: 18,
+                );
+              },
+              itemCount: state.persons.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                PersonChatted person = state.persons[index];
+                return Row(
+                  children: [
+                    const SizedBox(
+                      width: 18,
+                    ),
+                    avatarMessage(person.username,context),
+                  ],
+                );
+              });
+        },
+      ),
+    );
+  }
 }

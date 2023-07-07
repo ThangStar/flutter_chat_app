@@ -1,18 +1,24 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/message_chat.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../api/socket_api.dart';
 import '../../model/message.dart';
+import '../../model/profile.dart';
+import '../../storages/storage.dart';
 import '../widgets/container_chat.dart';
-import 'package:seller_app/api/socket_api.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final int idUserChatting;
+  final String fullNameUserChatting;
+
+  const ChatScreen(
+      {super.key,
+      required this.idUserChatting,
+      required this.fullNameUserChatting});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -20,23 +26,32 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<Message> messages = [];
+  late MessageBloc messageBloc;
+
   @override
   void initState() {
-    // TODO: implement initState
+    IO.Socket _socket;
     super.initState();
-    IO.Socket _socket = SocketInstance().socket;
-    _socket.on("messageFromServer", (data){
-      Message message = Message.fromJson(data);
-      setState(() {
-        messages = [...messages, message];
-      });
+    messageBloc = BlocProvider.of<MessageBloc>(context);
+    int myid = 0;
+    Storage.getMyProfile().then((profile) {
+      Profile prf = Profile.fromRawJson(profile ?? "");
+      myid = prf.id;
+      _socket = SocketInstance(id: myid).socket;
+      if (_socket.connected) {
+        _socket.on("messageFromServer", (data) {
+          Message message = Message.fromJson(data);
+          messageBloc.add(HandleActionAddMessageFromServer(message: message));
+          // setState(() {
+          //   messages = [...messages, message];
+          // });
+        });
+      }
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
-    MessageBloc messageBloc = BlocProvider.of<MessageBloc>(context);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -59,21 +74,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Elon Tusk",
-                        style: Theme
-                            .of(context)
+                        widget.fullNameUserChatting,
+                        style: Theme.of(context)
                             .textTheme
                             .titleMedium
                             ?.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 22),
+                                fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                       Text(
                         'Đang hoạt động',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w100,
                             color: colorScheme(context).scrim.withOpacity(0.6)),
                       )
@@ -102,30 +112,39 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Column(
           children: [
-            SizedBox(height: 22,),
+            SizedBox(
+              height: 22,
+            ),
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      Message ms = messages[index];
-                      return MessageChat(
-                          message: ms.message,
-                          dateTime: "1 phút trước",
-                          isMyMessage: ms.idUserSend == "abc");
-                    },
-                    separatorBuilder: (context, index) =>
-                        SizedBox(
-                          height: 12,
-                        ),
-                    itemCount: messages.length),
+                child: BlocBuilder<MessageBloc, MessageState>(
+                  builder: (context, state) {
+                    return ListView.separated(
+                        itemBuilder: (context, index) {
+                          Message message = state.messages[index];
+                          return MessageChat(
+                              message: message.message,
+                              dateTime: message.message,
+                              isMyMessage: message != widget.idUserChatting);
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                              height: 12,
+                            ),
+                        itemCount: state.messages.length);
+                  },
+                ),
               ),
             ),
             Align(
-                alignment: Alignment.bottomRight,
-                child: ContainerChat(handleActionSend: (txtMessage) =>
-                messageBloc..add(HandleActionSend(txtMessage: txtMessage))
-                ))
+              alignment: Alignment.bottomRight,
+              child: ContainerChat(
+                  handleActionSend: (txtMessage) => messageBloc
+                    ..add(HandleActionSend(
+                      idUserChatting: widget.idUserChatting.toString(),
+                      txtMessage: txtMessage,
+                    ))),
+            )
           ],
         ));
   }

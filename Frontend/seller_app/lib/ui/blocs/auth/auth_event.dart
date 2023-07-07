@@ -10,7 +10,9 @@ class LoginAuth extends AuthEvent{
   final String username;
   final String password;
 
-  LoginAuth({required this.username, required this.password});
+  const LoginAuth({required this.username, required this.password});
+}
+class InitEventFillData extends AuthEvent{
 }
 
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget avatarMessage(BuildContext context) {
+Widget avatarMessage(String fullname, BuildContext context) {
   return Column(
     children: [
       Image.asset(
@@ -12,7 +12,7 @@ Widget avatarMessage(BuildContext context) {
         height: 5,
       ),
       Text(
-        "John",
+        fullname,
         style: Theme.of(context).textTheme.bodyLarge,
       )
     ],

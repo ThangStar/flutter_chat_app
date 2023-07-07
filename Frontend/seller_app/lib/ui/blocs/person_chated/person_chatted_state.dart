@@ -1,10 +1,11 @@
 part of 'person_chatted_bloc.dart';
 
-abstract class PersonChattedState extends Equatable {
-  const PersonChattedState();
+ class PersonChattedState extends Equatable {
+   final List<PersonChatted> persons;
+
+   const PersonChattedState({required this.persons});
+  @override
+  List<Object> get props => [persons];
 }
 
-class PersonChattedInitial extends PersonChattedState {
-  @override
-  List<Object> get props => [];
-}
+

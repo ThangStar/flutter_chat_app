@@ -1,4 +1,4 @@
 module.exports = {
-     messageOfUser: 'SELECT messages.id, message, users.username, messages.dateTime FROM messages INNER JOIN users on' +
-          ' messages.idUserSend = users.id WHERE messages.idUserSend = ? OR messages.idUserGet = ?'
+     messageOfUser: 'SELECT users.id, users.username, messages.message, messages.dateTime ' +
+          'FROM users JOIN messages on messages.idUserSend = users.id OR messages.idUserGet = users.id  WHERE messages.idUserSend = ? OR messages.idUserGet = ? GROUP by users.id'
 }
