@@ -69,7 +69,7 @@ class _MessageChatState extends State<MessageChat> {
               duration: const Duration(milliseconds: 200),
               child: isExpanded
                   ? Text(
-                      widget.message,
+                      widget.dateTime,
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : const SizedBox())

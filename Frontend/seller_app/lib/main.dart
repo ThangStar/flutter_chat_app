@@ -6,6 +6,8 @@ import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
+import 'package:seller_app/ui/screens/message_screen.dart';
+import 'package:seller_app/ui/screens/profile_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
 import 'package:seller_app/ui/widgets/splash_screen.dart';
@@ -44,7 +46,7 @@ class _MyAppState extends State<MyApp> {
               colorScheme: lightColorScheme,
               textTheme: textTheme),
           // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-          home: const SplashScreen()
+          home: const ProfileScreen()
       ),
     );
   }

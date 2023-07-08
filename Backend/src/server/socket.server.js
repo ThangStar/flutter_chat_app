@@ -41,7 +41,7 @@ module.exports = {
                     console.log("idTarget: ",idTarget);
                     if (idTarget) {
                          console.log("send to: ", idTarget.idSocket);
-                         console.log("data", data);
+                         console.log("data", JSON.stringify(data));
                          io.to(idTarget.idSocket).emit('messageFromServer', data)
                     }
                })

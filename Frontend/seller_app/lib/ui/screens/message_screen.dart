@@ -4,6 +4,7 @@ import 'package:seller_app/model/person_chatted.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/widgets/my_action_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../api/socket_api.dart';
@@ -83,12 +84,16 @@ class _ChatScreenState extends State<MessageScreen> {
         child: Icon(color: colorScheme(context).onPrimary, Icons.add),
       ),
       appBar: AppBar(
+        backgroundColor: colorScheme(context).background,
+        toolbarHeight: 100,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Chào ${username},",
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: colorScheme(context).scrim.withOpacity(0.6)
+              ),
             ),
             Text("Tin nhắn",
                 style: Theme.of(context)
@@ -98,23 +103,26 @@ class _ChatScreenState extends State<MessageScreen> {
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: _newChat,
-              icon: const Icon(Icons.add_circle_outline_rounded))
+          MyActionButton(onPressed: () {  }, icon: Icons.search,)
         ],
       ),
       body: SingleChildScrollView(
         primary: true,
         child: Column(
           children: [
+            Divider(
+              thickness: 4,
+              color: colorScheme(context).tertiary.withOpacity(0.3),
+            ),
             const SizedBox(
               height: 18,
             ),
             const NearUserChatted(),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              child:
-                  Divider(color: colorScheme(context).scrim.withOpacity(0.1)),
+              child: Divider(
+                color: colorScheme(context).tertiary.withOpacity(0.3),
+              ),
             ),
             const ChatContent()
           ],
@@ -155,7 +163,8 @@ class _ChatContentState extends State<ChatContent> {
                   trailing: Text(
                     person.dateTime,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: colorScheme(context).scrim.withOpacity(0.6)),
+                      fontSize: 15,
+                        color: colorScheme(context).scrim.withOpacity(0.4)),
                   ),
                   leading: Image.asset(
                     width: 62,
@@ -172,14 +181,15 @@ class _ChatContentState extends State<ChatContent> {
                   subtitle: Text(
                     person.message,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: colorScheme(context).scrim.withOpacity(0.6)),
+                        color: colorScheme(context).scrim.withOpacity(0.4),  fontSize: 15),
                   ),
                 );
               },
               separatorBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Divider(
-                        color: colorScheme(context).scrim.withOpacity(0.1)),
+                      color: colorScheme(context).tertiary.withOpacity(0.3),
+                    ),
                   ),
               itemCount: state.persons.length);
         },
@@ -195,7 +205,7 @@ class NearUserChatted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 100,
       child: BlocBuilder<PersonChattedBloc, PersonChattedState>(
         builder: (context, state) {
           return ListView.separated(

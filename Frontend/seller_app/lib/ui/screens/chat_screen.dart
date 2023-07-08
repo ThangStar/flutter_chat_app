@@ -6,6 +6,7 @@ import 'package:seller_app/ui/widgets/message_chat.dart';
 
 import '../../model/message.dart';
 import '../widgets/container_chat.dart';
+import '../widgets/my_action_button.dart';
 
 class ChatScreen extends StatefulWidget {
   final int idUserChatting;
@@ -42,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 100,
           automaticallyImplyLeading: false,
           titleSpacing: 0,
           title: Padding(
@@ -82,20 +84,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           actions: [
-            IconButton(
-                color: colorScheme(context).tertiary,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.call,
-                  color: colorScheme(context).scrim,
-                )),
-            IconButton(
-                color: colorScheme(context).tertiary,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.call,
-                  color: colorScheme(context).scrim,
-                ))
+            MyActionButton(onPressed: () {  }, icon: Icons.call,),
+            MyActionButton(onPressed: () {  }, icon: Icons.video_camera_back_rounded,),
           ],
         ),
         body: Column(
@@ -123,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           Message message = state.messages[index];
                           return MessageChat(
                               message: message.message,
-                              dateTime: message.idUserSend,
+                              dateTime: message.dateTime ?? "Vừa xong",
                               isMyMessage: message.idUserSend !=
                                   widget.idUserChatting.toString());
                         },
@@ -141,6 +131,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   print(txtMessage);
 
                   context.read<MessageBloc>().add(HandleActionSend(
+                      dateTime: DateTime.now().toIso8601String(),
                         idUserChatting: widget.idUserChatting.toString(),
                         txtMessage: txtMessage,
                       ));

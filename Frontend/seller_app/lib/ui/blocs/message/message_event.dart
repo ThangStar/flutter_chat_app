@@ -11,9 +11,10 @@ abstract class MessageEvent extends Equatable {
 class HandleActionSend extends MessageEvent {
   final String txtMessage;
   final String idUserChatting;
+  final String? dateTime;
 
   const HandleActionSend(
-      {required this.idUserChatting, required this.txtMessage});
+      {required this.idUserChatting, required this.txtMessage, this.dateTime});
 }
 
 class HandleActionAddMessageFromServer extends MessageEvent{

@@ -13,7 +13,9 @@ Widget avatarMessage(String fullname, BuildContext context) {
       ),
       Text(
         fullname,
-        style: Theme.of(context).textTheme.bodyLarge,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          fontSize: 15,
+        ),
       )
     ],
   );
