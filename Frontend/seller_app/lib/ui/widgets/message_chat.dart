@@ -33,8 +33,16 @@ class _MessageChatState extends State<MessageChat> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Material(
-              color: colorScheme(context).secondary,
-              borderRadius: BorderRadius.circular(100),
+              shape: OutlineInputBorder(
+                borderSide: widget.isMyMessage
+                    ? BorderSide.none
+                    : BorderSide(
+                        width: 1, color: colorScheme(context).tertiary),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              color: widget.isMyMessage
+                  ? colorScheme(context).secondary
+                  : colorScheme(context).onPrimary,
               child: InkWell(
                 borderRadius: BorderRadius.circular(100),
                 onTap: () {
@@ -47,10 +55,10 @@ class _MessageChatState extends State<MessageChat> {
                       const EdgeInsets.symmetric(horizontal: 19, vertical: 8),
                   child: Text(
                     widget.message,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: colorScheme(context).onSecondary),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: widget.isMyMessage
+                            ? colorScheme(context).onSecondary
+                            : colorScheme(context).scrim),
                   ),
                 ),
               )),

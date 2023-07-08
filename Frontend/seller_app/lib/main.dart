@@ -8,15 +8,21 @@ import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
+import 'package:seller_app/ui/widgets/splash_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,7 @@ class MyApp extends StatelessWidget {
               colorScheme: lightColorScheme,
               textTheme: textTheme),
           // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-          home: const LoginScreen()
+          home: const SplashScreen()
       ),
     );
   }

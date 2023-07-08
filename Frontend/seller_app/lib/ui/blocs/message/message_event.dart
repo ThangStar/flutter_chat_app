@@ -5,7 +5,7 @@ abstract class MessageEvent extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [];
+  List<Object?> get props => [HandleActionSend, HandleActionAddMessageFromServer, ConnectToSocket, MessageInitialEvent];
 }
 
 class HandleActionSend extends MessageEvent {
@@ -21,3 +21,8 @@ class HandleActionAddMessageFromServer extends MessageEvent{
 
   HandleActionAddMessageFromServer({required this.message});
 }
+
+class ConnectToSocket extends MessageEvent{
+  
+}
+class MessageInitialEvent extends MessageEvent{}

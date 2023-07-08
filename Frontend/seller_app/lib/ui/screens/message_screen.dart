@@ -4,7 +4,13 @@ import 'package:seller_app/model/person_chatted.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../api/socket_api.dart';
+import '../../model/message.dart';
+import '../../model/profile.dart';
+import '../../storages/storage.dart';
+import '../blocs/message/message_bloc.dart';
 import '../widgets/avatar_message.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -16,9 +22,8 @@ class MessageScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<MessageScreen> {
   late PersonChattedBloc _chattedBloc;
-  List<PersonChatted> persons = [
-    PersonChatted(id: 1, message: "1", username: "2", dateTime: "2")
-  ];
+  String username = "";
+  late MessageBloc messageBloc;
 
   _newChat() {
     print('new chat');
@@ -27,9 +32,47 @@ class _ChatScreenState extends State<MessageScreen> {
   @override
   void initState() {
     super.initState();
-    _chattedBloc = BlocProvider.of<PersonChattedBloc>(context);
-    _chattedBloc.add(InitPersonChatted());
+    messageBloc = BlocProvider.of<MessageBloc>(context);
+
+    Storage.getMyProfile().then((value) {
+      Profile prf = Profile.fromRawJson(value ?? "");
+      setState(() {
+        username = prf.username;
+      });
+
+      // TODO: implement initState
+      _chattedBloc = BlocProvider.of<PersonChattedBloc>(context);
+      _chattedBloc.add(InitPersonChatted());
+
+      IO.Socket socket = SocketApi(prf.id).socket;
+      if (!socket.hasListeners("messageFromServer")) {
+        socket.on("messageFromServer", (data) async {
+          Message message = Message.fromJson(data);
+
+          messageBloc.add(HandleActionAddMessageFromServer(message: message));
+        });
+      }
+    });
   }
+
+  // Storage.getMyProfile().then((profile) {
+  //   Profile prf = Profile.fromRawJson(profile ?? "");
+  //   int myid = prf.id;
+  //   IO.Socket _socket = SocketInstance(id: myid).socket;
+  //
+  //   if (_socket.connected) {
+  //     _socket.on("messageFromServer", (data) {
+  //       Message message = Message.fromJson(data);
+  //       print(message);
+  //       // messageBloc.add(HandleActionAddMessageFromServer(message: message));
+  //       // setState(() {
+  //       //   messages = [...messages, message];
+  //       // });
+  //     });
+  //   } else {
+  //     print("socket connect failure");
+  //   }
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +87,7 @@ class _ChatScreenState extends State<MessageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Chào Alex,",
+              "Chào ${username},",
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             Text("Tin nhắn",
@@ -104,7 +147,9 @@ class _ChatContentState extends State<ChatContent> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatScreen(idUserChatting: person.id, fullNameUserChatting: person.username),
+                          builder: (context) => ChatScreen(
+                              idUserChatting: person.id,
+                              fullNameUserChatting: person.username),
                         ));
                   },
                   trailing: Text(
@@ -168,7 +213,7 @@ class NearUserChatted extends StatelessWidget {
                     const SizedBox(
                       width: 18,
                     ),
-                    avatarMessage(person.username,context),
+                    avatarMessage(person.username, context),
                   ],
                 );
               });

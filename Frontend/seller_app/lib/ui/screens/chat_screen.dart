@@ -3,12 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/message_chat.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../api/socket_api.dart';
 import '../../model/message.dart';
-import '../../model/profile.dart';
-import '../../storages/storage.dart';
 import '../widgets/container_chat.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,29 +21,21 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<Message> messages = [];
   late MessageBloc messageBloc;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    IO.Socket _socket;
-    super.initState();
     messageBloc = BlocProvider.of<MessageBloc>(context);
-    int myid = 0;
-    Storage.getMyProfile().then((profile) {
-      Profile prf = Profile.fromRawJson(profile ?? "");
-      myid = prf.id;
-      _socket = SocketInstance(id: myid).socket;
-      if (_socket.connected) {
-        _socket.on("messageFromServer", (data) {
-          Message message = Message.fromJson(data);
-          messageBloc.add(HandleActionAddMessageFromServer(message: message));
-          // setState(() {
-          //   messages = [...messages, message];
-          // });
-        });
-      }
-    });
+    super.initState();
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -118,15 +106,26 @@ class _ChatScreenState extends State<ChatScreen> {
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: BlocBuilder<MessageBloc, MessageState>(
+                child: BlocConsumer<MessageBloc, MessageState>(
+                  listener: (context, state) {
+                    if (state is NewMessageState) {
+                      print("NewMessageState");
+                      _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent*2,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.bounceIn);
+                    }
+                  },
                   builder: (context, state) {
                     return ListView.separated(
+                        controller: _scrollController,
                         itemBuilder: (context, index) {
                           Message message = state.messages[index];
                           return MessageChat(
                               message: message.message,
-                              dateTime: message.message,
-                              isMyMessage: message != widget.idUserChatting);
+                              dateTime: message.idUserSend,
+                              isMyMessage: message.idUserSend !=
+                                  widget.idUserChatting.toString());
                         },
                         separatorBuilder: (context, index) => SizedBox(
                               height: 12,
@@ -137,14 +136,15 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Align(
-              alignment: Alignment.bottomRight,
-              child: ContainerChat(
-                  handleActionSend: (txtMessage) => messageBloc
-                    ..add(HandleActionSend(
-                      idUserChatting: widget.idUserChatting.toString(),
-                      txtMessage: txtMessage,
-                    ))),
-            )
+                alignment: Alignment.bottomRight,
+                child: ContainerChat(handleActionSend: (txtMessage) {
+                  print(txtMessage);
+
+                  context.read<MessageBloc>().add(HandleActionSend(
+                        idUserChatting: widget.idUserChatting.toString(),
+                        txtMessage: txtMessage,
+                      ));
+                }))
           ],
         ));
   }
