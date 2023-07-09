@@ -4,13 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
-import 'package:seller_app/ui/screens/chat_screen.dart';
-import 'package:seller_app/ui/screens/login_screen.dart';
-import 'package:seller_app/ui/screens/message_screen.dart';
+import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/screens/profile_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
-import 'package:seller_app/ui/widgets/splash_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -39,15 +36,18 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => PersonChattedBloc(),
         ),
+        BlocProvider(
+          create: (context) => PostBloc(),
+        ),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(useMaterial3: true,
+          theme: ThemeData(
+              useMaterial3: true,
               colorScheme: lightColorScheme,
               textTheme: textTheme),
           // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-          home: const ProfileScreen()
-      ),
+          home: const ProfileScreen()),
     );
   }
 }

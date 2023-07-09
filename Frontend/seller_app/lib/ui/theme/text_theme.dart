@@ -12,7 +12,7 @@ var textTheme = TextTheme(
       fontFamily: GoogleFonts.roboto().fontFamily),
   bodyLarge: TextStyle(
       fontWeight: FontWeight.normal,
-      fontSize: 16,
+      fontSize: 17,
       fontFamily: GoogleFonts.roboto().fontFamily),
   bodyMedium: TextStyle(
       fontWeight: FontWeight.normal,

@@ -82,5 +82,4 @@ const login = (req, res) => {
      })
 }
 
-const userController = { getAllUser, getUserById, addUser, login }
-module.exports = userController
+module.exports =  { getAllUser, getUserById, addUser, login }

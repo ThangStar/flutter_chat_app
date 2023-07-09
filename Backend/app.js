@@ -3,8 +3,12 @@ const app = express()
 const userRouter = require('./src/router/user/user.router')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const courseRouter = require('./src/router/course/course.router')
 const messageRouter = require('./src/router/message/message.router')
+const postRouter = require('./src/router/post/post.router')
+
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 
 var server = require('http').createServer(app);
@@ -25,6 +29,6 @@ app.listen(3000, () => {
 
 app.use(cookieParser())
 app.use('/user', userRouter)
-app.use('/course', courseRouter)
 app.use('/messages', messageRouter)
+app.use('/post', postRouter)
 
