@@ -4,8 +4,8 @@ String spacingDateToNow(DateTime time) {
     return "${spacing.inDays} ngày trước";
   }else if(spacing.inHours > 0){
     return "${spacing.inHours} giờ trước";
-  }else if(spacing.inHours > 0){
-    return "${spacing.inHours} phút trước";
+  }else if(spacing.inMinutes > 0){
+    return "${spacing.inMinutes} phút trước";
   }else{
     return "Vừa xong";
   }

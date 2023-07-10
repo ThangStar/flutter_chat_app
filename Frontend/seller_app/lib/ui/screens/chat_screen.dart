@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/message_chat.dart';
@@ -7,15 +8,17 @@ import 'package:seller_app/ui/widgets/message_chat.dart';
 import '../../model/message.dart';
 import '../widgets/container_chat.dart';
 import '../widgets/my_action_button.dart';
+import '../widgets/online_icon.dart';
 
 class ChatScreen extends StatefulWidget {
+  final String avatarUrl;
   final int idUserChatting;
   final String fullNameUserChatting;
 
   const ChatScreen(
       {super.key,
       required this.idUserChatting,
-      required this.fullNameUserChatting});
+      required this.fullNameUserChatting, required this.avatarUrl});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -51,13 +54,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(double.infinity),
-                    child: Image.asset(
-                      'assets/images/avatar.png',
-                      width: 52,
-                      height: 52,
-                    )),
+                CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        widget.avatarUrl)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Column(
@@ -71,11 +70,17 @@ class _ChatScreenState extends State<ChatScreen> {
                             ?.copyWith(
                                 fontWeight: FontWeight.bold, fontSize: 22),
                       ),
-                      Text(
-                        'Đang hoạt động',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w100,
-                            color: colorScheme(context).scrim.withOpacity(0.6)),
+                      Row(
+                        children: [
+                          OnlineIcon(),
+                          SizedBox(width: 8,),
+                          Text(
+                            'Đang hoạt động',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w100,
+                                color: colorScheme(context).scrim.withOpacity(0.6)),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -84,8 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           actions: [
-            MyActionButton(onPressed: () {  }, icon: Icons.call,),
-            MyActionButton(onPressed: () {  }, icon: Icons.video_camera_back_rounded,),
+            MyActionButton(onPressed: () {  }, icon: SvgPicture.asset('assets/svg/voice_call.svg'),),
+            MyActionButton(onPressed: () {  }, icon: SvgPicture.asset('assets/svg/video_call.svg'),),
           ],
         ),
         body: Column(
@@ -129,7 +134,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 alignment: Alignment.bottomRight,
                 child: ContainerChat(handleActionSend: (txtMessage) {
                   print(txtMessage);
-
                   context.read<MessageBloc>().add(HandleActionSend(
                       dateTime: DateTime.now().toIso8601String(),
                         idUserChatting: widget.idUserChatting.toString(),

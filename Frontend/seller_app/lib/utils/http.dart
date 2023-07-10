@@ -8,7 +8,7 @@ class Http {
     //load form storage
     print("Constants.BASE_URL ${Constants.BASE_URL}");
     BaseOptions options = BaseOptions(
-      baseUrl: Constants.BASE_URL ?? "http://192.168.10.26:3000",
+      baseUrl: Constants.BASE_URL ?? "http://localhost:3000",
       connectTimeout: const Duration(seconds: 10),
     );
     dio = Dio(options);

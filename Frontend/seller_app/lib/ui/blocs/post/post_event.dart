@@ -15,3 +15,7 @@ class AddPost extends PostEvent{
 
   AddPost({required this.title, required this.content, required this.idUser});
 }
+
+class InitPostEvent extends PostEvent{
+
+}

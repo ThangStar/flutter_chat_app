@@ -30,7 +30,7 @@ class _MessageChatState extends State<MessageChat> {
     return Align(
       alignment: widget.isMyMessage ? Alignment.topRight : Alignment.topLeft,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: widget.isMyMessage? CrossAxisAlignment.end: CrossAxisAlignment.start,
         children: [
           Material(
               shape: OutlineInputBorder(

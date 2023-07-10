@@ -5,15 +5,17 @@
 import 'dart:convert';
 
 class PersonChatted {
+  String avatar;
   int id;
-  String message;
   String username;
+  String message;
   String dateTime;
 
   PersonChatted({
+    required this.avatar,
     required this.id,
-    required this.message,
     required this.username,
+    required this.message,
     required this.dateTime,
   });
 
@@ -22,16 +24,18 @@ class PersonChatted {
   String toRawJson() => json.encode(toJson());
 
   factory PersonChatted.fromJson(Map<String, dynamic> json) => PersonChatted(
+    avatar: json["avatar"],
     id: json["id"],
-    message: json["message"],
     username: json["username"],
+    message: json["message"],
     dateTime: json["dateTime"],
   );
 
   Map<String, dynamic> toJson() => {
+    "avatar": avatar,
     "id": id,
-    "message": message,
     "username": username,
-    "dateTime": dateTime
+    "message": message,
+    "dateTime": dateTime,
   };
 }

@@ -8,6 +8,7 @@ import 'package:seller_app/ui/widgets/my_button.dart';
 import '../../model/profile.dart';
 import '../../storages/storage.dart';
 import '../widgets/my_text_field.dart';
+import 'navigation/bottom_nav_main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const MessageScreen(),
+              builder: (context) => const BottomNavMain(),
             ));
       }
       if (state is LoginFailure) {

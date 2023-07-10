@@ -82,4 +82,16 @@ const login = (req, res) => {
      })
 }
 
-module.exports =  { getAllUser, getUserById, addUser, login }
+const uploadAvatar = (req, res) => {
+     if(req.file){
+          res.send(toJson({
+               result: 'success!'
+          }))
+     }else{
+          res.send(toJson({
+               result: 'failure!'
+          }))
+     }
+}
+
+module.exports = { getAllUser, getUserById, addUser, login, uploadAvatar }

@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 
-class ContainerChat extends StatelessWidget {
+class ContainerChat extends StatefulWidget {
   const ContainerChat({super.key, required this.handleActionSend});
 
   final Function(String) handleActionSend;
+
+  @override
+  State<ContainerChat> createState() => _ContainerChatState();
+}
+
+class _ContainerChatState extends State<ContainerChat> {
+  TextEditingController messageController = TextEditingController();
+  bool isEditting = false;
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController messageController = TextEditingController();
+
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
         color: colorScheme(context).tertiary.withOpacity(0.1),
       ),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(11),
+            padding: const EdgeInsets.all(11),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: Border.all(width: 1, color: Colors.pink[600]!),
@@ -29,7 +38,7 @@ class ContainerChat extends StatelessWidget {
               color: Colors.pink[600],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           Flexible(
@@ -39,7 +48,9 @@ class ContainerChat extends StatelessWidget {
                   color: colorScheme(context).onSecondary,
                   border: Border.all(
                     width: 1,
-                    color: colorScheme(context).tertiary,
+                    color: isEditting
+                        ? colorScheme(context).secondary
+                        : colorScheme(context).tertiary,
                   )),
               child: Row(
                 children: [
@@ -52,23 +63,37 @@ class ContainerChat extends StatelessWidget {
                               .bodyLarge
                               ?.copyWith(color: Colors.black.withOpacity(0.6)),
                           border: InputBorder.none,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
                           prefixIconColor: Colors.amber,
                           isDense: true),
                       controller: messageController,
+                      onTapOutside: (event) {
+                        setState(() {
+                          isEditting = false;
+                        });
+                      },
+                      onTap: () {
+                        setState(() {
+                          isEditting = true;
+                        });
+                      },
                     ),
                   ),
                   Material(
-                    borderRadius:
-                        BorderRadius.horizontal(right: Radius.circular(8)),
+                    borderRadius: const BorderRadius.horizontal(
+                        right: Radius.circular(8)),
                     color: Colors.green[500],
                     child: InkWell(
-                      borderRadius:
-                          BorderRadius.horizontal(right: Radius.circular(8)),
-                      onTap: ()=>handleActionSend(messageController.text),
+                      borderRadius: const BorderRadius.horizontal(
+                          right: Radius.circular(8)),
+                      onTap: () {
+
+                        widget.handleActionSend(messageController.text);
+                        messageController.text = "";
+                      },
                       splashColor: Colors.green[800],
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: 56,
                         height: 60,
                         child: Icon(

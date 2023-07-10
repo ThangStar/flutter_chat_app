@@ -25,7 +25,7 @@ class SocketApi {
   SocketApi._internal(){
     print("socket created");
     socket = IO.io(
-        Constants.SOCKET_URL,
+        Constants.SOCKET_URL ?? "http://localhost:3001",
         OptionBuilder()
             .disableForceNewConnection()
             .disableForceNew()

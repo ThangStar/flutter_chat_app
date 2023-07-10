@@ -8,6 +8,7 @@ import 'package:seller_app/ui/widgets/my_action_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../api/socket_api.dart';
+import '../../constants/constants.dart';
 import '../../model/message.dart';
 import '../../model/profile.dart';
 import '../../storages/storage.dart';
@@ -92,8 +93,7 @@ class _ChatScreenState extends State<MessageScreen> {
             Text(
               "Chào ${username},",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: colorScheme(context).scrim.withOpacity(0.6)
-              ),
+                  color: colorScheme(context).scrim.withOpacity(0.6)),
             ),
             Text("Tin nhắn",
                 style: Theme.of(context)
@@ -103,7 +103,10 @@ class _ChatScreenState extends State<MessageScreen> {
           ],
         ),
         actions: [
-          MyActionButton(onPressed: () {  }, icon: Icons.search,)
+          MyActionButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -157,20 +160,19 @@ class _ChatContentState extends State<ChatContent> {
                         MaterialPageRoute(
                           builder: (context) => ChatScreen(
                               idUserChatting: person.id,
-                              fullNameUserChatting: person.username),
+                              fullNameUserChatting: person.username,
+                              avatarUrl: "${Constants.BASE_URL}/images/${person.avatar}"),
                         ));
                   },
                   trailing: Text(
                     person.dateTime,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: 15,
+                        fontSize: 15,
                         color: colorScheme(context).scrim.withOpacity(0.4)),
                   ),
-                  leading: Image.asset(
-                    width: 62,
-                    height: 62,
-                    'assets/images/avatar.png',
-                  ),
+                  leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          '${Constants.BASE_URL}/images/${person.avatar}')),
                   title: Text(
                     person.username,
                     style: Theme.of(context)
@@ -181,7 +183,8 @@ class _ChatContentState extends State<ChatContent> {
                   subtitle: Text(
                     person.message,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: colorScheme(context).scrim.withOpacity(0.4),  fontSize: 15),
+                        color: colorScheme(context).scrim.withOpacity(0.4),
+                        fontSize: 15),
                   ),
                 );
               },
@@ -223,7 +226,7 @@ class NearUserChatted extends StatelessWidget {
                     const SizedBox(
                       width: 18,
                     ),
-                    avatarMessage(person.username, context),
+                    avatarMessage(person.username,  '${Constants.BASE_URL}/images/${person.avatar}', context),
                   ],
                 );
               });

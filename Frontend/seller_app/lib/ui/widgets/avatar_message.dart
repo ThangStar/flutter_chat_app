@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-Widget avatarMessage(String fullname, BuildContext context) {
+import '../../constants/constants.dart';
+
+Widget avatarMessage(String fullname, String avatarUrl, BuildContext context) {
   return Column(
     children: [
-      Image.asset(
-        width: 62,
-        height: 62,
-        'assets/images/avatar.png',
-      ),
+      CircleAvatar(backgroundImage: NetworkImage(avatarUrl)),
       SizedBox(
         height: 5,
       ),
       Text(
         fullname,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          fontSize: 15,
-        ),
+              fontSize: 15,
+            ),
       )
     ],
   );

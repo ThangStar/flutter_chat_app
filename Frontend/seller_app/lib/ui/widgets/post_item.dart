@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/utils/spacing_date_to_now.dart';
 
 import '../../model/post.dart';
 
@@ -26,14 +28,16 @@ class PostItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        post.fullname,
+                        post.username,
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        post.dateTime,
+                        post.dateTime == ""
+                            ? ""
+                            : spacingDateToNow(DateTime.parse(post.dateTime)),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w100,
                             color: colorScheme(context).scrim.withOpacity(0.6)),
@@ -68,14 +72,17 @@ class PostItem extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Wrap(
-                      spacing: 24,
-                      children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.heart_broken)),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.mode_comment_outlined)),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.screen_share_outlined)),
+                  Wrap(spacing: 24, children: [
+                    IconButton(
+                        onPressed: () {},
+                        icon: SvgPicture.asset("assets/svg/heart.svg")),
+                    IconButton(
+                        onPressed: () {},
+                        icon: SvgPicture.asset("assets/svg/comment.svg")),
+                    IconButton(
+                        onPressed: () {},
+                        icon: SvgPicture.asset("assets/svg/share.svg")),
                   ]),
-
                 ],
               ),
             ],

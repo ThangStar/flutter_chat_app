@@ -5,7 +5,7 @@ import '../theme/color_schemes.dart';
 class MyActionButton extends StatelessWidget {
   const MyActionButton({super.key, required this.onPressed, required this.icon});
   final Function() onPressed;
-  final IconData icon;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MyActionButton extends StatelessWidget {
               onTap: onPressed,
               child: Container(
                   padding: const EdgeInsets.all(16),
-                  child:  Icon(icon)))),
+                  child: icon))),
     );
   }
 }

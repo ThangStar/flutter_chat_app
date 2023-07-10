@@ -5,7 +5,8 @@ import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
-import 'package:seller_app/ui/screens/profile_screen.dart';
+import 'package:seller_app/ui/screens/login_screen.dart';
+import 'package:seller_app/ui/screens/navigation/bottom_nav_main.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
 
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
               colorScheme: lightColorScheme,
               textTheme: textTheme),
           // darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-          home: const ProfileScreen()),
+          home:  LoginScreen()),
     );
   }
 }

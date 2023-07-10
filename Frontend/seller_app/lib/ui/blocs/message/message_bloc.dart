@@ -23,6 +23,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   FutureOr<void> _handleActionSend(
       HandleActionSend event, Emitter<MessageState> emit) async {
     emit(MessageLoadingState(messages: state.messages));
+    print(event.txtMessage);
 
     Storage.getMyProfile().then((value) {
       Profile profile = Profile.fromRawJson(value ?? "");

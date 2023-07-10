@@ -18,7 +18,7 @@ class MyButton extends StatelessWidget {
           : colorScheme(context).secondary,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: onPressed,
+        onTap: !isDisable ? onPressed : null,
         child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:seller_app/model/post.dart';
 import 'package:seller_app/utils/api_path.dart';
@@ -49,6 +51,43 @@ class Api {
       return Failure(body: res.data, statusCode: res.statusCode ?? 400, message: res.statusMessage ?? "error");
     }catch(err){
     return Failure(message: err.toString());
+    }
+  }
+
+  static Future<Object> getPostById()async{
+    try{
+      Response res = await Http().dio.get(ApiPath.getPostById);
+      if(res.statusCode == 200){
+        return Success(body: res.data);
+      }
+      return Failure(body: res.data, statusCode: res.statusCode ?? 400, message: res.statusMessage ?? "error");
+    }catch(err){
+      print("err getPostById: $err");
+      return Failure(message: err.toString());
+    }
+  }
+
+  static uploadAvatar (String path) async{
+    String fileName = path.split('/').last;
+    print(fileName);
+    try{
+      final formData = FormData.fromMap({
+        'avatar':  await MultipartFile.fromFile(path, filename: fileName),
+      });
+
+      Response res = await Http().dio.post(ApiPath.uploadAvatar,
+        data: formData,
+        onSendProgress: (count, total) {
+        print('đang tải lên..$count - $total');
+
+      },);
+      if(res.statusCode == 200){
+        return Success(body: res.data);
+      }
+      return Failure(body: res.data, statusCode: res.statusCode ?? 400, message: res.statusMessage ?? "error");
+    }catch(err){
+      print("err getPostById: $err");
+      return Failure(message: err.toString());
     }
   }
 }

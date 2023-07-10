@@ -5,7 +5,7 @@ part of 'post_bloc.dart';
   const PostState({required this.posts});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [posts];
 }
 class AddPostting extends PostState{
   const AddPostting({required super.posts});
@@ -16,5 +16,11 @@ class AddPostSucces extends PostState{
 
 class AddPostFailure extends PostState{
   const AddPostFailure({required super.posts});
+}
 
+class LoadingPost extends PostState{
+  LoadingPost({required super.posts});
+}
+class LoadingPostFinish extends PostState{
+  LoadingPostFinish({required super.posts});
 }

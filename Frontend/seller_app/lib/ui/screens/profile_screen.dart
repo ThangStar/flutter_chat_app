@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:seller_app/api/api.dart';
 import 'package:seller_app/model/post.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
@@ -6,8 +9,11 @@ import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/info_item_user.dart';
 import 'package:seller_app/ui/widgets/my_divider.dart';
 
+import '../../utils/image_picker.dart';
+import '../blocs/post/post_bloc.dart';
 import '../widgets/avatar_and_action_button.dart';
 import '../widgets/post_item.dart';
+import '../widgets/shimmer_loading.dart';
 import 'add_post_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,7 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Storage.getMyProfile().then((value) {
       Profile profile = Profile.fromRawJson(value ?? "");
@@ -30,7 +35,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         fullname = profile.username;
       });
     });
+
+    context.read<PostBloc>().add(InitPostEvent());
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +73,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Row(
                       children: [
-                        Image.asset(
-                          'assets/images/avatar.png',
-                          width: 80,
-                          height: 80,
+                        InkWell(
+                          onTap: () async {
+                           XFile? image = await pickerImage();
+                           Api.uploadAvatar(image!.path);
+                          },
+                          child: Image.asset(
+                            'assets/images/avatar.png',
+                            width: 80,
+                            height: 80,
+                          ),
                         ),
                         const SizedBox(
                           width: 16,
@@ -162,29 +177,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ?.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-             AvatarAndActionButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPostScreen()));
-            },),
+            AvatarAndActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddPostScreen()));
+              },
+            ),
             SizedBox(
               height: 16,
             ),
-            MyDivider(isPrimary: false),
-            ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return PostItem(
-                    post: Post(
-                        fullname: "Elon Tusk",
-                        dateTime: "Vừa xong",
-                        title: "I miss her face",
-                        content:
-                            "Open the Tradebase app to get started and follow the steps. Tradebase doesn’t charge a fee to create or maintain your Tradebase account."),
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                    MyDivider(isPrimary: false),
-                itemCount: 10)
+            BlocListener<PostBloc, PostState>(
+              listener: (context, state) {
+                try {
+                  if (state is LoadingPost) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                  } else if (state is LoadingPostFinish) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                } catch (err) {}
+              },
+              child: isLoading
+                  ? Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        ShimmerLoading(
+                          isLoading: true,
+                          child: Column(
+                            children: [
+                              PostItem(
+                                post: Post(
+                                    title: "",
+                                    content: "",
+                                    dateTime: '',
+                                    username: ''),
+                              ),
+                              PostItem(
+                                post: Post(
+                                    title: "",
+                                    content: "",
+                                    dateTime: '',
+                                    username: ''),
+                              ),
+                              PostItem(
+                                post: Post(
+                                    title: "",
+                                    content: "",
+                                    dateTime: '',
+                                    username: ''),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : MyDivider(isPrimary: false),
+            ),
+            BlocBuilder<PostBloc, PostState>(
+              builder: (context, state) {
+                return ListView.separated(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      Post post = state.posts[index];
+                      return PostItem(post: post);
+                    },
+                    separatorBuilder: (context, index) =>
+                        MyDivider(isPrimary: false),
+                    itemCount: state.posts.length);
+              },
+            )
           ],
         ),
       ),
