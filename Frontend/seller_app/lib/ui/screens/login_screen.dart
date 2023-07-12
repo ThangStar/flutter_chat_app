@@ -1,14 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
-import 'package:seller_app/ui/screens/message_screen.dart';
+import 'package:seller_app/ui/blocs/profile/profile_event.dart';
 import 'package:seller_app/ui/widgets/my_button.dart';
 
-import '../../model/profile.dart';
-import '../../storages/storage.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../widgets/my_text_field.dart';
-import 'navigation/bottom_nav_main.dart';
+import 'navigation/app_bar_nav_main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,19 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController controllerUsername = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
 
-  _initDataInput() async{
-    String? myProfile = await Storage.getMyProfile();
-    if (myProfile != null) {
-      Profile profile = Profile.fromRawJson(myProfile);
-      controllerUsername.text = profile.username;
-      controllerPassword.text = profile.password;
-    }
-  }
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     _authBloc = BlocProvider.of<AuthBloc>(context);
-    _initDataInput();
+    context.read<ProfileBloc>().add(InitProfileEvent());
   }
 
   @override
@@ -44,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const BottomNavMain(),
+              builder: (context) => const AppBarNavMain(),
             ));
       }
       if (state is LoginFailure) {
@@ -61,9 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Wrap(runSpacing: 12, children: [
                   const Text("ĐĂNG NHẬP"),
-                  MyTextField(
-                    label: "tài khoản",
-                    controller:controllerUsername,
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, state) {
+                      if(state is ProfileInitial){
+                        controllerUsername =
+                              TextEditingController(text: state.profile.username);
+                          controllerPassword =
+                              TextEditingController(text: state.profile.password);
+                      }
+                      return MyTextField(
+                        label: "tài khoản",
+                        controller: controllerUsername,
+                      );
+                    },
                   ),
                   MyTextField(
                     label: "mật khẩu",

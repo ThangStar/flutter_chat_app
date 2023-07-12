@@ -132,7 +132,11 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             Align(
                 alignment: Alignment.bottomRight,
-                child: ContainerChat(handleActionSend: (txtMessage) {
+                child: ContainerChat(
+                    onTapImage: (){
+                      context.read<MessageBloc>().add(HandleActionSendImageMessage());
+                    },
+                    handleActionSend: (txtMessage) {
                   print(txtMessage);
                   context.read<MessageBloc>().add(HandleActionSend(
                       dateTime: DateTime.now().toIso8601String(),

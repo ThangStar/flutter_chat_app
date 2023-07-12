@@ -6,9 +6,9 @@ const getMessageOfUser = (req, res) => {
      conn.query(messageOfUser, [req.query.myId, req.query.myId], (err, rs, field) => {
           err ?
                res.send('error')
-               :    
-               res.status(200)
-          res.send(toJson(rs))
+               :
+res.status(200)
+res.send(toJson(rs))
      })
 }
 module.exports = { getMessageOfUser }

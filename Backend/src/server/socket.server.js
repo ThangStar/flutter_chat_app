@@ -45,6 +45,10 @@ module.exports = {
                          io.to(idTarget.idSocket).emit('messageFromServer', data)
                     }
                })
+
+               socket.on('imageFromClient', data => {
+                    console.log("data from client: "+data);
+               })
                socket.on('disconnect', () => {
                     users = users.filter(e => {
                          return e.id != id

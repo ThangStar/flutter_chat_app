@@ -6,11 +6,14 @@ import 'package:seller_app/model/post.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/ui/widgets/info_item_user.dart';
 import 'package:seller_app/ui/widgets/my_divider.dart';
 
+import '../../constants/constants.dart';
 import '../../utils/image_picker.dart';
 import '../blocs/post/post_bloc.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../widgets/avatar_and_action_button.dart';
 import '../widgets/post_item.dart';
 import '../widgets/shimmer_loading.dart';
@@ -75,13 +78,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         InkWell(
                           onTap: () async {
-                           XFile? image = await pickerImage();
-                           Api.uploadAvatar(image!.path);
+                            XFile? image = await pickerImage();
+                            Api.uploadAvatar(image!.path);
                           },
-                          child: Image.asset(
-                            'assets/images/avatar.png',
-                            width: 80,
-                            height: 80,
+                          child: BlocBuilder<ProfileBloc, ProfileState>(
+                            builder: (context, state) {
+                              return Avatar(url: state.profile.avatar, isLarge: true,);
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -139,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: colorScheme(context).scrim.withOpacity(0.6)),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: sizeScreen.width / 4,
                     child: IconButton(
                         onPressed: () {}, icon: const Icon(Icons.edit_note)),
@@ -166,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            MyDivider(isPrimary: true),
+            const MyDivider(isPrimary: true),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               child: Text(
@@ -185,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         builder: (context) => const AddPostScreen()));
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             BlocListener<PostBloc, PostState>(

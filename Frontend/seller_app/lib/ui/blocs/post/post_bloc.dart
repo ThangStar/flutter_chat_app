@@ -20,7 +20,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   FutureOr<void> _addPost(AddPost event, Emitter<PostState> emit) async {
     emit(AddPostting(posts: state.posts));
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     try {
       Object res = await Api.addPost(event.title, event.content, event.idUser);
       if (res is Success) {
@@ -37,7 +37,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   FutureOr<void> _initPostEvent(
       InitPostEvent event, Emitter<PostState> emit) async {
     emit(LoadingPost(posts: state.posts));
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 2));
     try {
       Object res = await Api.getPostById();
       if (res is Success) {

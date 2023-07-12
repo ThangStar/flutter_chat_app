@@ -1,7 +1,11 @@
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:seller_app/api/socket_api.dart';
 import 'package:seller_app/model/post.dart';
+import 'package:seller_app/model/profile.dart';
+import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/api_path.dart';
 import 'package:seller_app/utils/http.dart';
 import 'package:seller_app/utils/response.dart';
@@ -89,5 +93,16 @@ class Api {
       print("err getPostById: $err");
       return Failure(message: err.toString());
     }
+  }
+
+  static emitImageSocket(XFile? image)async{
+    String path = image?.path ?? "";
+    String? jsonProfile = await Storage.getMyProfile();
+    Profile profile = Profile.fromRawJson(jsonProfile ?? "");
+    int myId = profile.id;
+
+    SocketApi(myId).socket.emit("imageFromClient", {
+      image: path
+    });
   }
 }

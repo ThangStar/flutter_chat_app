@@ -14,6 +14,10 @@ const insertMessage = ({ idUserSend, idUserGet, message, dateTime } = message) =
      })
 }
 
+const insertImage = (req, res) => {
+     
+}
+
 module.exports = {
      insertMessage,
 

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/utils/image_picker.dart';
 
 class ContainerChat extends StatefulWidget {
-  const ContainerChat({super.key, required this.handleActionSend});
+  const ContainerChat({super.key, required this.handleActionSend, required this.onTapImage});
 
   final Function(String) handleActionSend;
+  final Function() onTapImage;
 
   @override
   State<ContainerChat> createState() => _ContainerChatState();
@@ -26,16 +29,19 @@ class _ContainerChatState extends State<ContainerChat> {
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(11),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(width: 1, color: Colors.pink[600]!),
-              color: Colors.pink[50],
-            ),
-            child: Icon(
-              Icons.image,
-              color: Colors.pink[600],
+          InkWell(
+            onTap: widget.onTapImage,
+            child: Container(
+              padding: const EdgeInsets.all(11),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(width: 1, color: Colors.pink[600]!),
+                color: Colors.pink[50],
+              ),
+              child: Icon(
+                Icons.image,
+                color: Colors.pink[600],
+              ),
             ),
           ),
           const SizedBox(

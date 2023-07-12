@@ -4,6 +4,7 @@ import 'package:seller_app/model/person_chatted.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/ui/widgets/my_action_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -170,9 +171,7 @@ class _ChatContentState extends State<ChatContent> {
                         fontSize: 15,
                         color: colorScheme(context).scrim.withOpacity(0.4)),
                   ),
-                  leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          '${Constants.BASE_URL}/images/${person.avatar}')),
+                  leading: Avatar(url: person.avatar),
                   title: Text(
                     person.username,
                     style: Theme.of(context)
@@ -226,7 +225,7 @@ class NearUserChatted extends StatelessWidget {
                     const SizedBox(
                       width: 18,
                     ),
-                    avatarMessage(person.username,  '${Constants.BASE_URL}/images/${person.avatar}', context),
+                    avatarMessage(person.username,  person.avatar, context),
                   ],
                 );
               });

@@ -20,10 +20,13 @@ class HandleActionSend extends MessageEvent {
 class HandleActionAddMessageFromServer extends MessageEvent{
   final Message message;
 
-  HandleActionAddMessageFromServer({required this.message});
+  const HandleActionAddMessageFromServer({required this.message});
 }
 
 class ConnectToSocket extends MessageEvent{
   
 }
 class MessageInitialEvent extends MessageEvent{}
+
+class HandleActionSendImageMessage extends MessageEvent{
+}

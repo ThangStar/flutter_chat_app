@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:seller_app/api/api.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
@@ -9,6 +11,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../api/socket_api.dart';
 import '../../../model/message.dart';
+import '../../../utils/image_picker.dart';
 
 part 'message_event.dart';
 
@@ -18,6 +21,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   MessageBloc() : super(const MessageState(messages: [])) {
     on<HandleActionSend>(_handleActionSend);
     on<HandleActionAddMessageFromServer>(_handleActionAddMessageFromServer);
+    on<HandleActionSendImageMessage>(_handleActionSendImageMessage);
   }
 
   FutureOr<void> _handleActionSend(
@@ -58,5 +62,11 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     event.message.dateTime = spacingTime;
     emit(MessageState(messages: [...state.messages, event.message]));
     emit(NewMessageState(messages: state.messages));
+  }
+
+  FutureOr<void> _handleActionSendImageMessage(HandleActionSendImageMessage event, Emitter<MessageState> emit) async {
+    XFile? image = await pickerImage();
+    Api.emitImageSocket(image);
+    // emit(MessageLoadingState(messages: state.messages));
   }
 }
