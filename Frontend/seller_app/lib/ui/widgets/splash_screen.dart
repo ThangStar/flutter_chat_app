@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Storage.getMyProfile().then((jsonProfile) {
       Profile prf = Profile.fromRawJson(jsonProfile ?? "");
       _socket = SocketApi(prf.id).socket;
-
       _socket.on("messageFromServer", (data) async {
         Message message = Message.fromJson(data);
 

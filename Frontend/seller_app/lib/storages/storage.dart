@@ -23,4 +23,5 @@ class Storage {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(StoragePath.userCurrentChatProfile);
   }
+
 }

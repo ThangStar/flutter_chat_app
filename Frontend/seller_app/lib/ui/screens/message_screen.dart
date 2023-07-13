@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:seller_app/model/person_chatted.dart';
+import 'package:seller_app/services/notification_service.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
@@ -10,7 +14,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../api/socket_api.dart';
 import '../../constants/constants.dart';
-import '../../model/message.dart';
+import '../../model/message.dart' as MS;
 import '../../model/profile.dart';
 import '../../storages/storage.dart';
 import '../blocs/message/message_bloc.dart';
@@ -31,7 +35,7 @@ class _ChatScreenState extends State<MessageScreen> {
   _newChat() {
     print('new chat');
   }
-
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   @override
   void initState() {
     super.initState();
@@ -50,9 +54,24 @@ class _ChatScreenState extends State<MessageScreen> {
       IO.Socket socket = SocketApi(prf.id).socket;
       if (!socket.hasListeners("messageFromServer")) {
         socket.on("messageFromServer", (data) async {
-          Message message = Message.fromJson(data);
-
+          MS.Message message = MS.Message.fromJson(data);
           messageBloc.add(HandleActionAddMessageFromServer(message: message));
+
+
+          NotificationService.showNoti(
+            int.parse(message.idUserSend),
+            flutterLocalNotificationsPlugin,
+            (String messageInput) {
+              socket.emit("messageFromClient", {
+                'message': messageInput,
+                'idUserGet': message.idUserSend,
+                'idUserSend': prf.id.toString(),
+                'dateTime': DateTime.now().toIso8601String()
+              });
+            },
+          {"notification": {"title": "Tin nhắn mới", "body": message.message}, "data": {"routing": "Routing"}}
+          );
+          // }
         });
       }
     });
@@ -82,7 +101,9 @@ class _ChatScreenState extends State<MessageScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorScheme(context).secondary,
-        onPressed: () {},
+        onPressed: ()async{
+          // await NotificationService.showNoti(1, "title", "body", flutterLocalNotificationsPlugin);
+        },
         child: Icon(color: colorScheme(context).onPrimary, Icons.add),
       ),
       appBar: AppBar(
@@ -162,7 +183,8 @@ class _ChatContentState extends State<ChatContent> {
                           builder: (context) => ChatScreen(
                               idUserChatting: person.id,
                               fullNameUserChatting: person.username,
-                              avatarUrl: "${Constants.BASE_URL}/images/${person.avatar}"),
+                              avatarUrl:
+                                  "${Constants.BASE_URL}/images/${person.avatar}"),
                         ));
                   },
                   trailing: Text(
@@ -206,7 +228,7 @@ class NearUserChatted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: BlocBuilder<PersonChattedBloc, PersonChattedState>(
         builder: (context, state) {
@@ -225,7 +247,7 @@ class NearUserChatted extends StatelessWidget {
                     const SizedBox(
                       width: 18,
                     ),
-                    avatarMessage(person.username,  person.avatar, context),
+                    avatarMessage(person.username, person.avatar, context),
                   ],
                 );
               });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/message_chat.dart';
@@ -32,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     messageBloc = BlocProvider.of<MessageBloc>(context);
     super.initState();
-
+    Storage.saveUserCurrentProfile(widget.idUserChatting.toString());
   }
 
   @override
@@ -40,6 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
+    Storage.saveUserCurrentProfile("");
   }
 
   @override

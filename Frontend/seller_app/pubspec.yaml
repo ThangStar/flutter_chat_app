@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: ^2.0.7
   image_picker: ^1.0.0
   persistent_bottom_nav_bar: ^5.0.2
+  flutter_local_notifications: ^15.1.0+1
 
 
 dev_dependencies:
@@ -74,6 +75,8 @@ flutter:
     - .env
     - assets/images/
     - assets/svg/
+    - assets/raw/
+
 
 
 
