@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:seller_app/main.dart';
 import 'package:seller_app/ui/screens/home_screen.dart';
 import 'package:seller_app/ui/screens/profile_screen.dart';
 import 'package:seller_app/ui/screens/utils_screen.dart';
+import 'package:seller_app/utils/search_user_delegate.dart';
 import '../../../services/notification_service.dart';
 import '../../../model/message.dart' as MS;
 
@@ -30,10 +32,19 @@ class _AppBarNavMainState extends State<AppBarNavMain>
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   late MessageBloc messageBloc;
+  bool isLoadingSearch = false;
 
   @override
   void initState() {
     super.initState();
+
+    Storage.getIsDarkTheme().then((value) {
+      print("is Dark: $value");
+
+      MyApp.themeNotifier.value =
+          value ?? false ? ThemeMode.dark : ThemeMode.light;
+    });
+
     messageBloc = BlocProvider.of<MessageBloc>(context);
 
     Storage.getMyProfile().then((value) {
@@ -78,6 +89,35 @@ class _AppBarNavMainState extends State<AppBarNavMain>
                 'Omit',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
+              actions: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: colorScheme(context).scrim,
+                    ),
+                    onPressed: () {
+                      showSearch(
+                          context: context,
+                          delegate: SearchUserDelegate(
+                              callbackLoadingState: () {
+                                print("loading..");
+                                setState(() {
+                                  isLoadingSearch = true;
+                                });
+                              },
+                              isLoading: isLoadingSearch,
+                              callBackLoadingFinishState: () {
+                                setState(() {
+                                  isLoadingSearch = false;
+                                });
+                              }));
+                    },
+                  ),
+                )
+              ],
               pinned: true,
               floating: true,
               bottom: TabBar(

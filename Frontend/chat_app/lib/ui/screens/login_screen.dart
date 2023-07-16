@@ -25,6 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
+    Storage.getIsDarkTheme().then((value) {
+      print("is Dark: $value");
+
+      MyApp.themeNotifier.value =
+          value ?? false ? ThemeMode.dark : ThemeMode.light;
+    });
+
     _authBloc = BlocProvider.of<AuthBloc>(context);
     context.read<ProfileBloc>().add(InitProfileEvent());
 

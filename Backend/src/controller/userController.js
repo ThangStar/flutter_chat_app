@@ -1,6 +1,7 @@
 const toJson = require("./../utils/ToJson");
 const conn = require("../API/mySql.api");
 const upload = require("../utils/upload");
+const { searchUserMyUsernameQuery } = require("../utils/queryCommand");
 
 
 const getAllUser = (req, res) => {
@@ -97,4 +98,18 @@ const uploadAvatar = (req, res) => {
      }
 }
 
-module.exports = { getAllUser, getUserById, addUser, login, uploadAvatar }
+const searchByUsername = (req, res) => {
+     const query = req.query.query
+
+     console.log('query', query);
+
+     conn.query(searchUserMyUsernameQuery, [`%${query}%`], (err, rs, field) => {
+          err ? 
+          res.send(toJson({
+               "result": rs
+          })).status(400)
+          :
+          res.send(toJson(rs)).status(200)
+     })
+}
+module.exports = { getAllUser, getUserById, addUser, login, uploadAvatar, searchByUsername }

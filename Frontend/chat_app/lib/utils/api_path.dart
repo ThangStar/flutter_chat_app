@@ -5,5 +5,5 @@ class ApiPath {
   static const getPostById = "/post";
 
   static const uploadAvatar = "/user/avatar";
-
+  static const searchUserByUsername = "/user/search";
 }

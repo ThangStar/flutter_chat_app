@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/api/socket_api.dart';
-import 'package:seller_app/model/post.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/api_path.dart';
@@ -116,5 +113,19 @@ class Api {
     int myId = profile.id;
 
     SocketApi(myId).socket.emit("imageFromClient", {image: path});
+  }
+
+  static Future<Object> searchUserByUsername(String query) async {
+    try {
+      Response response = await Http()
+          .dio
+          .get(ApiPath.searchUserByUsername, queryParameters: {"query": query});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error search');
+    }
   }
 }

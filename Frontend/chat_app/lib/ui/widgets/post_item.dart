@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -88,7 +87,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               const SizedBox(
                 height: 12,
               ),
-              widget.post.styleColor.isNull ||
+              widget.post.styleColor == null ||
                       widget.post.styleColor == "446602910"
                   ? Text(
                       widget.post.content,
@@ -102,7 +101,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
-                          color: widget.post.styleColor.isNull
+                          color: widget.post.styleColor == null
                               ? const Color(0xFFFFFFFF)
                               : Color(int.parse(widget.post.styleColor!)),
                           borderRadius: BorderRadius.circular(8)),
