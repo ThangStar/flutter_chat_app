@@ -1,0 +1,13 @@
+@urldev = http://localhost:2001
+
+
+### get all post
+
+GET {{urldev}}/post
+Content-Type: application/json
+
+### get message broadcast
+GET {{urldev}}/messages/broadCast
+     ?idUserSend=123
+     &idUserGet=456
+Content-Type: application/json

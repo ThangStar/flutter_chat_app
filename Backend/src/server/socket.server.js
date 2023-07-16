@@ -1,4 +1,4 @@
-const { insertMessage } = require("../controller/sockets/message.socket.controller");
+const { insertMessage, getMessagesById } = require("../controller/sockets/message.socket.controller");
 
 var users = [];
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 
                let isAxist = false;
                users.forEach(e => {
-                    if(e.idDb == idDbUser){
+                    if (e.idDb == idDbUser) {
                          e.idSocket = id
                          isAxist = true;
                     }
@@ -23,31 +23,44 @@ module.exports = {
                }
                console.log(`online: `, users);
 
+
+               //when client open chat screen => server send data chat to client
+               //1: client on messages 
+               //2: client emit requestMessagesFromClient
+               //3: server get data message from Db and emit messages to client
+               //4: client has data and fill to UI
+
+               socket.on('requestMessagesFromClient', data => {
+                    console.log(data);
+                    getMessagesById(data, (rs) => {
+                         console.log("DATA", rs);
+                         io.to(id).emit('messages', rs)
+                    })
+               })
+
                socket.on('messageFromClient', (data) => {
+
+                    console.log("data send", data);
                     const message =
                     {
                          idUserSend: data.idUserSend,
                          idUserGet: data.idUserGet,
                          message: data.message,
                     }
-                    console.log(message);
-                    // insertMessage(message)
+                    insertMessage(message)
                     // socket.broadcast.emit("messageFromServer", data)
-                    console.log(data.idUserGet);
-                    // users.find
                     const idTarget = users.find(obj => {
                          return obj.idDb == data.idUserGet;
                     });
-                    console.log("idTarget: ",idTarget);
+                    console.log("idTarget: ", idTarget);
                     if (idTarget) {
                          console.log("send to: ", idTarget.idSocket);
-                         console.log("data", JSON.stringify(data));
                          io.to(idTarget.idSocket).emit('messageFromServer', data)
                     }
                })
 
                socket.on('imageFromClient', data => {
-                    console.log("data from client: "+data);
+                    console.log("data from client: " + data);
                })
                socket.on('disconnect', () => {
                     users = users.filter(e => {

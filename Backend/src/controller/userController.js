@@ -1,5 +1,6 @@
 const toJson = require("./../utils/ToJson");
-const conn = require("../API/mySql.api")
+const conn = require("../API/mySql.api");
+const upload = require("../utils/upload");
 
 
 const getAllUser = (req, res) => {
@@ -83,11 +84,13 @@ const login = (req, res) => {
 }
 
 const uploadAvatar = (req, res) => {
-     if(req.file){
+
+
+     if (req.file) {
           res.send(toJson({
                result: 'success!'
           }))
-     }else{
+     } else {
           res.send(toJson({
                result: 'failure!'
           }))

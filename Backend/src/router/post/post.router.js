@@ -7,4 +7,5 @@ router.get('/', getPostById)
 router.get('/tym', getTymByIdPost)
 
 
+
 module.exports = router
