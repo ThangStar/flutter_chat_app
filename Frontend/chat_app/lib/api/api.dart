@@ -128,4 +128,17 @@ class Api {
       return Failure(message: 'error search');
     }
   }
+
+  static Future<Object> incrementTymPost(int myId, int postId) async {
+    try {
+      Response response = await Http().dio.post(ApiPath.incrementPost,
+          data: {"idUser": myId, "idPost": postId});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error increment tym');
+    }
+  }
 }

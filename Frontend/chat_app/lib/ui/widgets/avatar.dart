@@ -13,7 +13,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return !isLarge
         ? CircleAvatar(
-            backgroundColor: colorScheme(context).tertiary,
+            backgroundColor: colorScheme(context).onBackground.withOpacity(0.6),
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: CircleAvatar(
@@ -26,7 +26,8 @@ class Avatar extends StatelessWidget {
             width: 82,
             height: 82,
             decoration: BoxDecoration(
-              border: Border.all(width: 2, color: colorScheme(context).tertiary ),
+              border:
+                  Border.all(width: 2, color: colorScheme(context).tertiary),
               shape: BoxShape.circle,
               image: DecorationImage(
                   image: NetworkImage("${Constants.BASE_URL}/images/$url"),

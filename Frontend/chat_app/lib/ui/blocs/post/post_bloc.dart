@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:seller_app/api/api.dart';
+import 'package:seller_app/model/profile.dart';
+import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/response.dart';
 
 import '../../../model/post.dart';
@@ -17,6 +19,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc() : super(const PostState(posts: [])) {
     on<AddPost>(_addPost);
     on<InitPostEvent>(_initPostEvent);
+    on<TymPostEvent>(_tymPostEvent);
   }
 
   FutureOr<void> _addPost(AddPost event, Emitter<PostState> emit) async {
@@ -44,17 +47,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     await Future.delayed(const Duration(seconds: 2));
     try {
       Object res = await Api.getPostById();
+      List<Post> posts = [];
       if (res is Success) {
-        final listDynamic = jsonDecode(res.body) as List<dynamic>;
-        final posts = listDynamic.map((e) {
-          print(e);
-          return Post.fromJson(e);
-        }).toList();
+        final postsJson = jsonDecode(res.body) as List<dynamic>;
+        for (var e in postsJson) {
+          posts.add(Post.fromJson(e ?? ""));
+        }
         emit(PostState(posts: posts));
-
-        posts.forEach((element) {
-          print(element.styleColor);
-        });
       } else if (res is Failure) {
         print('failure: ${res.statusCode}');
       }
@@ -63,5 +62,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     } finally {
       emit(LoadingPostFinish(posts: state.posts));
     }
+  }
+
+  FutureOr<void> _tymPostEvent(
+      TymPostEvent event, Emitter<PostState> emit) async {
+    String? jsonPrf = await Storage.getMyProfile();
+    Profile prf = Profile.fromRawJson(jsonPrf ?? "");
+
+    Object response = await Api.incrementTymPost(prf.id, event.postId);
+
+    // if(response is Success){
+    //   final newValue = [...state.posts[event.index].totalTym + 1];
+    //   emit(PostState(posts: [...state.posts]))
+    // }else if(response is Failure){
+
+    // }
   }
 }

@@ -8,8 +8,8 @@ Content-Type: application/json
 
 ### get message broadcast
 GET {{urldev}}/messages/broadCast
-     ?idUserSend=123
-     &idUserGet=456
+     ?idUserSend=1
+     &idUserGet=4
 Content-Type: application/json
 
 
@@ -17,3 +17,13 @@ Content-Type: application/json
 GET {{urldev}}/user/search
      ?query=2
 Content-Type: application/json
+
+
+### increment tym 
+POST {{urldev}}/tym/increment
+Content-Type: application/json
+
+{
+     "idUser": 1,
+     "idPost": 50
+}

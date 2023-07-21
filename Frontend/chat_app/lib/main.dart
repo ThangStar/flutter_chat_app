@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
@@ -11,10 +12,21 @@ import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/screens/navigation/app_bar_nav_main.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  // check if is running on Web
+  if (kIsWeb) {
+    // initialiaze the facebook javascript SDK
+    await FacebookAuth.i.webAndDesktopInitialize(
+      appId: "1542417196196799",
+      cookie: true,
+      xfbml: true,
+      version: "v14.0",
+    );
+  }
   runApp(const MyApp());
 }
 

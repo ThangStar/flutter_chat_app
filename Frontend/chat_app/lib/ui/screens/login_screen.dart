@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_event.dart';
 import 'package:seller_app/ui/widgets/my_button.dart';
@@ -101,7 +103,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text("Chưa có tài khoản?"),
                       InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () {
+                          onTap: () async {
+                            final LoginResult result = await FacebookAuth
+                                .instance
+                                .login(); // by default we request the email and the public profile
+                            if (result.status == LoginStatus.success) {
+                              // you are logged
+                              final AccessToken accessToken =
+                                  result.accessToken!;
+                              print(accessToken);
+                            } else {
+                              print(result.status);
+                              print(result.message);
+                            }
                             // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
                           },
                           child: const Padding(

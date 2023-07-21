@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
 
 import '../../model/post.dart';
@@ -82,7 +82,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
-                    ?.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
+                    ?.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 12,
@@ -98,8 +98,8 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                   : Container(
                       width: double.infinity,
                       height: 220,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
                           color: widget.post.styleColor == null
                               ? const Color(0xFFFFFFFF)
@@ -119,37 +119,69 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                 height: 18,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Wrap(spacing: 24, children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
-                        if (isFavorite) {
-                          _controllerFavorite.animateTo(1,
-                              duration: const Duration(seconds: 2),
-                              curve: Curves.fastOutSlowIn);
-                        } else {
-                          _controllerFavorite.animateTo(0.3,
-                              duration: const Duration(milliseconds: 200));
-                        }
-                      },
-                      icon: Lottie.asset(
-                        'assets/raw/heart_effect.json',
-                        controller: _controllerFavorite,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.fill,
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isFavorite = !isFavorite;
+                            });
+                            if (isFavorite) {
+                              _controllerFavorite.animateTo(1,
+                                  duration: const Duration(seconds: 2),
+                                  curve: Curves.fastOutSlowIn);
+                            } else {
+                              _controllerFavorite.animateTo(0.3,
+                                  duration: const Duration(milliseconds: 200));
+                            }
+                          },
+                          icon: Lottie.asset(
+                            'assets/raw/heart_effect.json',
+                            controller: _controllerFavorite,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Text(
+                          widget.post.totalTym.toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme(context)
+                                      .scrim
+                                      .withOpacity(0.8)),
+                        )
+                      ],
                     ),
-                    IconButton(
-                      padding: const EdgeInsets.all(20),
-                      onPressed: () {},
-                      icon: SvgPicture.asset("assets/svg/comment.svg",
-                          width: 23,
-                          height: 23,
-                          color: colorScheme(context).scrim.withOpacity(0.7)),
+                    Row(
+                      children: [
+                        IconButton(
+                          padding: const EdgeInsets.all(20),
+                          onPressed: () {},
+                          icon: SvgPicture.asset("assets/svg/comment.svg",
+                              width: 23,
+                              height: 23,
+                              color:
+                                  colorScheme(context).scrim.withOpacity(0.7)),
+                        ),
+                        Text(
+                          "20",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme(context)
+                                      .scrim
+                                      .withOpacity(0.8)),
+                        )
+                      ],
                     ),
                     IconButton(
                         padding: const EdgeInsets.all(20),
@@ -160,6 +192,58 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                             color:
                                 colorScheme(context).scrim.withOpacity(0.7))),
                   ]),
+                  const SizedBox(
+                    width: 90,
+                    height: 43,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      clipBehavior: Clip.antiAlias,
+                      children: [
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Avatar(
+                                url: 'avatar-1689384802173-863137306.png'),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Avatar(
+                                url: 'avatar-1689384802173-863137306.png'),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 30,
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Avatar(
+                                url: 'avatar-1689384802173-863137306.png'),
+                          ),
+                        ),
+                        // Container(
+                        //   width: 30,
+                        //   height: 30,
+                        //   child: const Avatar(
+                        //       url: 'avatar-1689384802173-863137306.png'),
+                        // ),
+                        // Container(
+                        //   width: 30,
+                        //   height: 30,
+                        //   child: const Avatar(
+                        //       url: 'avatar-1689384802173-863137306.png'),
+                        // )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ],

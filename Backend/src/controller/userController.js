@@ -86,6 +86,13 @@ const login = (req, res) => {
 
 const uploadAvatar = (req, res) => {
 
+     if (req.files) {
+          if (req.files.filename.data.toString('hex',0,4) ==  '89504e47' || req.files.filename.data.toString('hex',0,4) == 'ffd8ffe0' || req.files.filename.data.toString('hex',0,4) == '47494638' ) {
+             
+          } else {
+              console.log('it not an image')
+          }
+     }
 
      if (req.file) {
           res.send(toJson({

@@ -1,18 +1,40 @@
 var fs = require('fs');
 var im = require('imagemagick');
+const sharp = require('sharp');
+const changeQuality = require('./changeQuality');
 
-const resizeImage = (path, cb) => {
-     return new Promise(() => {
-          im.resize({
-               srcData: fs.readFileSync(path, 'binary'),
-               width: 200,
-               height: 500
-          }, function (err, stdout, stderr) {
-               if (err) throw err
-               fs.writeFileSync('kittens-resized.jpg', stdout, 'binary');
-               console.log('resized kittens.jpg to fit within 200x500px')
-               cb()
-          });
-     })
+const resizeImage = async (path, res, cbDel, waterMarkPath) => {
+     const pathArr = path.split('.');
+     const pathChanged = pathArr[0] + "resized.jpg"
+     try {
+          sharp(path)
+               .composite([
+                    {
+                         input: waterMarkPath,
+                         top: 5,
+                         left: 5
+                    }
+               ])
+               .resize({
+                    width: 500,
+                    height: 200
+               }).toFile(pathChanged, async (err) => {
+                    if (err) {
+                         console.log("ERROR", err)
+                    } else {
+                         await changeQuality(pathChanged, res, cbDel)
+                    }
+               })
+
+          // await sharp(pathChanged).metadata()
+     } catch (error) {
+          await cbDel()
+          console.log("ERROR", 'its not image')
+          await fs.unlink(pathChanged, () => {
+
+          })
+     } finally {
+          cbDel()
+     }
 }
 module.exports = resizeImage

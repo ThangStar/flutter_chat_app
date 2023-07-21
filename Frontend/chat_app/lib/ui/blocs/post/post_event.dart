@@ -21,3 +21,17 @@ class AddPost extends PostEvent {
 }
 
 class InitPostEvent extends PostEvent {}
+
+class TymPostEvent extends PostEvent {
+  final int postId;
+  final int index;
+
+  const TymPostEvent({required this.index, required this.postId});
+}
+
+class UnTymPostEvent extends PostEvent {
+  final int postId;
+  final int index;
+
+  const UnTymPostEvent({required this.index, required this.postId});
+}

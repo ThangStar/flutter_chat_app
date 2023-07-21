@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { getAllUser, getUserById, addUser, login, uploadAvatar, searchByUsername } = require('../../controller/userController')
-const uploadFile = require('../../utils/upload')
+const {uploadFile} = require('../../utils/upload')
 
 
 router.get('/', getAllUser)
