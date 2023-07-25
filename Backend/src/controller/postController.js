@@ -2,13 +2,13 @@ const conn = require("../API/mySql.api");
 const toJson = require("../utils/ToJson");
 const NodeCache = require("node-cache");
 
-const { addAPost, getAllPost, getTymByIdPostCommand } = require("../utils/queryCommand");
+const { addAPost, getAllPost, getTymByIdPostCommand, tymPostQuery } = require("../utils/queryCommand");
 const { myCache, KEY_CACHE } = require("../utils/nodeCache");
 const pathCache = require("../storage/cache.storage");
 
 
 const addPost = async (req, res) => {
-     const {title, content, idUser, style_color} = req.body
+     const { title, content, idUser, style_color } = req.body
      console.log("POST VALUE", req.body);
      conn.query(addAPost, [idUser, title, content, style_color], (err, rs, field) => {
           if (err) {
@@ -76,4 +76,55 @@ const getTymByIdPost = (req, res) => {
      }
 }
 
-module.exports = { addPost, getPostById, getTymByIdPost }
+const addTymPost = (req, res) => {
+     try {
+          const { idUser, idPost } = req.query
+          var response = []
+
+          conn.beginTransaction((err) => {
+               err ?
+                    res.send(toJson({
+                         result: 'error tym post'
+                    })).status(400)
+                    :
+                    //step1: insert tym
+                    conn.query(tymPostQuery, [idUser, idPost], (err, rs, fields) => {
+                         if (err) {
+                              return conn.rollback(() => {
+                                   res.send(toJson({
+                                        result: 'error tym post'
+                                   })).status(400)
+                              })
+                         }
+                    })
+               //step2: get tym by id post
+               conn.query(getTymByIdPostCommand, [idPost], (err, rs, field) => {
+                    if (err) {
+                         conn.rollback(() => {
+                              res.send(toJson({
+                                   result: 'error get tym post'
+                              })).status(400)
+                         })
+                    } else {
+                         response = rs
+                    }
+               })
+               conn.commit((err) => {
+                    if (err) {
+                         res.send(toJson({
+                              result: 'error get tym post'
+                         })).status(400)
+                    } else {
+                         res.send(toJson(response))
+                    }
+               })
+          })
+
+     } catch (error) {
+
+     }
+
+
+}
+
+module.exports = { addPost, getPostById, getTymByIdPost, addTymPost }

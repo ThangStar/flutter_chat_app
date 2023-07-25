@@ -15,7 +15,7 @@ require('./src/utils/sendOTP').transporter
 
 app.use(
   cors({
-    origin: "http://localhost:55228",
+    origin: "http://localhost:52789",
     credentials: true,
     exposedHeaders: ["Access-Control-Allow-Origin"],
   })

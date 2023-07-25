@@ -20,7 +20,8 @@ module.exports = {
      getTymByIdPostCommand: 'SELECT * FROM DETAIL_TYM WHERE IDPOST = ?',
      getMessagesByIdQuery: "SELECT * FROM messages WHERE idUserSend = ? AND idUserGet = ? OR idUserGet = ? AND idUserSend = ?",
      searchUserMyUsernameQuery: "SELECT * FROM USERS WHERE users.username LIKE ?",
-     incrementTymQuery: "INSERT INTO detail_tym(idUser,idPost) VALUES (?,?)"
+     incrementTymQuery: "INSERT INTO detail_tym(idUser,idPost) VALUES (?,?)",
+     tymPostQuery: "INSERT INTO `detail_tym`(`idUser`, `idPost`) VALUES (?,?)",
 }
 
 // SELECT detail_tym.idUser as "total_like",
