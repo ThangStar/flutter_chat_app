@@ -7,6 +7,8 @@ const messageRouter = require('./src/router/message/message.router')
 const postRouter = require('./src/router/post/post.router')
 const tymRouter = require('./src/router/tym/tym.router')
 const authRouter = require('./src/router/auth/auth.router')
+const commentRouter = require('./src/router/comment/comment.router')
+
 const cors = require("cors");
 const passport = require('passport')
 require('./src/auth/passport.auth')
@@ -15,15 +17,15 @@ require('./src/utils/sendOTP').transporter
 
 app.use(
   cors({
-    origin: "http://localhost:52789",
+    origin: "http://localhost:51103",
     credentials: true,
     exposedHeaders: ["Access-Control-Allow-Origin"],
   })
 );
 
 
-const PORT_SOCKET = 2000
-const PORT_SERVER = 2001
+const PORT_SOCKET = process.env.PORT_SOCKET | 2000
+const PORT_SERVER = process.env.PORT_SERVER | 2001
 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
@@ -58,6 +60,8 @@ app.use('/messages', messageRouter)
 app.use('/post', postRouter)
 app.use('/tym', tymRouter)
 app.use('/auth', authRouter)
+app.use('/comment', commentRouter)
+
 
 
 

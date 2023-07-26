@@ -129,16 +129,43 @@ class Api {
     }
   }
 
-  static Future<Object> incrementTymPost(int myId, int postId) async {
+  static Future<Object> incTymPost(int myId, int postId) async {
     try {
-      Response response = await Http().dio.post(ApiPath.incrementPost,
-          data: {"idUser": myId, "idPost": postId});
+      Response response = await Http().dio.get(ApiPath.incTymPost,
+          queryParameters: {"idUser": myId, "idPost": postId});
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }
       return Failure(body: response.data);
     } catch (e) {
       return Failure(message: 'error increment tym');
+    }
+  }
+
+
+  static Future<Object> decTymPost(int myId, int postId) async {
+    try {
+      Response response = await Http().dio.post(ApiPath.decTymPost,
+          data: {"idUser": myId, "idPost": postId});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error dec tym');
+    }
+  }
+
+  static Future<Object> getCommentById(int idPost) async {
+    try {
+      Response response = await Http().dio.get(ApiPath.getCommentByIdPost,
+          queryParameters: {"idPost": idPost});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error get comment');
     }
   }
 }

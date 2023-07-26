@@ -14,9 +14,11 @@ import '../../utils/image_picker.dart';
 import '../blocs/post/post_bloc.dart';
 import '../blocs/profile/profile_bloc.dart';
 import '../widgets/avatar_and_action_button.dart';
+import '../widgets/container_chat.dart';
 import '../widgets/post_item.dart';
 import '../widgets/shimmer_loading.dart';
 import 'add_post_screen.dart';
+import 'comment_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -224,6 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     content: "",
                                     dateTime: '',
                                     username: ''),
+                                tymEvent: () {},
                               ),
                               PostItem(
                                 post: Post(
@@ -231,6 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     content: "",
                                     dateTime: '',
                                     username: ''),
+                                tymEvent: () {},
                               ),
                               PostItem(
                                 post: Post(
@@ -238,6 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     content: "",
                                     dateTime: '',
                                     username: ''),
+                                tymEvent: () {},
                               ),
                             ],
                           ),
@@ -253,16 +258,33 @@ class _ProfileScreenState extends State<ProfileScreen>
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       Post post = state.posts[index];
-                      return PostItem(post: post);
+                      return PostItem(
+                        commentCallback: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommentScreen(post: post),
+                            )),
+                        post: post,
+                        unTymEvent: () => context.read<PostBloc>().add(
+                            UnTymPostEvent(
+                                index: index, postId: post.idPost ?? 0)),
+                        tymEvent: () {
+                          context.read<PostBloc>().add(
+                              TymPostEvent(index: 1, postId: post.idPost ?? 0));
+                        },
+                      );
                     },
                     separatorBuilder: (context, index) =>
                         MyDivider(isPrimary: false),
                     itemCount: state.posts.length);
               },
-            )
+            ),
+         
           ],
         ),
+
       ),
+
     );
   }
 

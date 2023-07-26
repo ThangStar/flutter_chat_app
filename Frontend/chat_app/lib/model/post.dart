@@ -13,6 +13,7 @@ class Post {
   String dateTime;
   String username;
   String? styleColor;
+  bool? isLiked;
 
   Post(
       {this.totalTym,
@@ -22,22 +23,23 @@ class Post {
       required this.content,
       required this.dateTime,
       required this.username,
-      this.styleColor});
+      this.styleColor,
+      this.isLiked});
 
   factory Post.fromRawJson(String str) => Post.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
-        totalTym: json['total_tym'],
-        idPost: json["id_post"],
-        id: json["id"],
-        title: json["title"],
-        content: json["content"],
-        dateTime: json["dateTime"],
-        username: json["username"],
-        styleColor: json["style_color"],
-      );
+      totalTym: json['total_tym'],
+      idPost: json["id_post"],
+      id: json["id"],
+      title: json["title"],
+      content: json["content"],
+      dateTime: json["dateTime"],
+      username: json["username"],
+      styleColor: json["style_color"],
+      isLiked: bool.parse(json['isLiked'] ?? "false"));
 
   Map<String, dynamic> toJson() => {
         "total_tym": totalTym,
@@ -47,6 +49,7 @@ class Post {
         "content": content,
         "dateTime": dateTime,
         "username": username,
-        "style_color": styleColor
+        "style_color": styleColor,
+        'isLiked': isLiked
       };
 }

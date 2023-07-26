@@ -6,7 +6,6 @@ class Http {
 
   Http() {
     //load form storage
-    print("Constants.BASE_URL ${Constants.BASE_URL}");
     BaseOptions options = BaseOptions(
       baseUrl: Constants.BASE_URL ?? "http://localhost:3000",
       connectTimeout: const Duration(seconds: 10),

@@ -1,9 +1,9 @@
 const express = require('express')
-const { addPost, getPostById , getTymByIdPost} = require('../../controller/postController')
-const { incrementTym } = require('../../controller/tymController')
+const { incTym, decTym } = require('../../controller/tymController')
 const router = express.Router()
 
-router.post('/increment', incrementTym)
-
+router.get('/inc', incTym)
+router.post('/dec', decTym)
+// router.get('/pre', PreController)
 
 module.exports = router

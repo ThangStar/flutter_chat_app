@@ -22,7 +22,7 @@ class _ContainerChatState extends State<ContainerChat> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: colorScheme(context).tertiary.withOpacity(0.1),
       ),
@@ -31,7 +31,7 @@ class _ContainerChatState extends State<ContainerChat> {
           InkWell(
             onTap: widget.onTapImage,
             child: Container(
-              padding: const EdgeInsets.all(11),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1, color: Colors.pink[600]!),
@@ -72,7 +72,7 @@ class _ContainerChatState extends State<ContainerChat> {
                                       .withOpacity(0.6)),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 12),
+                              vertical: 2, horizontal: 12),
                           prefixIconColor: Colors.amber,
                           isDense: true),
                       controller: messageController,
@@ -101,8 +101,8 @@ class _ContainerChatState extends State<ContainerChat> {
                       },
                       splashColor: Colors.green[800],
                       child: const SizedBox(
-                        width: 56,
-                        height: 60,
+                        width: 40,
+                        height: 40,
                         child: Icon(
                           Icons.send,
                           color: Colors.white,

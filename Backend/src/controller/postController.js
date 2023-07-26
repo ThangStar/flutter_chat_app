@@ -44,7 +44,7 @@ const getPostById = (req, res) => {
                          :
                          myCache.set(pathCache.PostData, toJson(rs))
                     res.status(200)
-                    console.log("RS");
+                    console.log(rs);
                     res.send(JSON.stringify(rs))
                })
           }
@@ -76,55 +76,6 @@ const getTymByIdPost = (req, res) => {
      }
 }
 
-const addTymPost = (req, res) => {
-     try {
-          const { idUser, idPost } = req.query
-          var response = []
-
-          conn.beginTransaction((err) => {
-               err ?
-                    res.send(toJson({
-                         result: 'error tym post'
-                    })).status(400)
-                    :
-                    //step1: insert tym
-                    conn.query(tymPostQuery, [idUser, idPost], (err, rs, fields) => {
-                         if (err) {
-                              return conn.rollback(() => {
-                                   res.send(toJson({
-                                        result: 'error tym post'
-                                   })).status(400)
-                              })
-                         }
-                    })
-               //step2: get tym by id post
-               conn.query(getTymByIdPostCommand, [idPost], (err, rs, field) => {
-                    if (err) {
-                         conn.rollback(() => {
-                              res.send(toJson({
-                                   result: 'error get tym post'
-                              })).status(400)
-                         })
-                    } else {
-                         response = rs
-                    }
-               })
-               conn.commit((err) => {
-                    if (err) {
-                         res.send(toJson({
-                              result: 'error get tym post'
-                         })).status(400)
-                    } else {
-                         res.send(toJson(response))
-                    }
-               })
-          })
-
-     } catch (error) {
-
-     }
 
 
-}
-
-module.exports = { addPost, getPostById, getTymByIdPost, addTymPost }
+module.exports = { addPost, getPostById, getTymByIdPost }

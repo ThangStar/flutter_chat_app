@@ -24,3 +24,6 @@ class LoadingPost extends PostState{
 class LoadingPostFinish extends PostState{
   LoadingPostFinish({required super.posts});
 }
+class TymFinish extends PostState{
+  TymFinish({required super.posts});
+}

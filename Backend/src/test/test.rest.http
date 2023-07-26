@@ -1,8 +1,6 @@
 @urldev = http://localhost:2001
 
-
 ### get all post
-
 GET {{urldev}}/post
 Content-Type: application/json
 
@@ -18,7 +16,6 @@ GET {{urldev}}/user/search
      ?query=2
 Content-Type: application/json
 
-
 ### increment tym 
 POST {{urldev}}/tym/increment
 Content-Type: application/json
@@ -27,3 +24,8 @@ Content-Type: application/json
      "idUser": 1,
      "idPost": 50
 }
+
+###get all comment
+GET {{urldev}}/comment
+     ?idPost=50
+Content-Type: application/json

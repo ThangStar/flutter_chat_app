@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:seller_app/ui/screens/comment_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
@@ -8,9 +9,13 @@ import 'package:seller_app/utils/spacing_date_to_now.dart';
 import '../../model/post.dart';
 
 class PostItem extends StatefulWidget {
-  const PostItem({super.key, required this.post});
+  const PostItem(
+      {super.key, required this.post, this.tymEvent, this.unTymEvent, this.commentCallback});
 
   final Post post;
+  final Function()? tymEvent;
+  final Function()? unTymEvent;
+  final Function()? commentCallback;
 
   @override
   State<PostItem> createState() => _PostItemState();
@@ -23,8 +28,10 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    isFavorite = widget.post.isLiked ?? false;
     _controllerFavorite = AnimationController(
       vsync: this,
+      value: isFavorite ? 1 : 0
     );
   }
 
@@ -120,30 +127,40 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Wrap(spacing: 24, children: [
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isFavorite = !isFavorite;
-                            });
-                            if (isFavorite) {
-                              _controllerFavorite.animateTo(1,
-                                  duration: const Duration(seconds: 2),
-                                  curve: Curves.fastOutSlowIn);
-                            } else {
-                              _controllerFavorite.animateTo(0.3,
-                                  duration: const Duration(milliseconds: 200));
-                            }
-                          },
-                          icon: Lottie.asset(
-                            'assets/raw/heart_effect.json',
-                            controller: _controllerFavorite,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.fill,
+                        Material(
+                          child: InkWell(
+                            radius: 100,
+                            onTap: () {
+                              setState(() {
+                                isFavorite = !isFavorite;
+                              });
+                              if (isFavorite) {
+                                widget.tymEvent!();
+                                _controllerFavorite.animateTo(1,
+                                    duration: const Duration(seconds: 2),
+                                    curve: Curves.fastOutSlowIn);
+                              } else {
+                                widget.unTymEvent!();
+                                _controllerFavorite.animateTo(0.3,
+                                    duration:
+                                        const Duration(milliseconds: 200));
+                              }
+                            },
+                            child: Lottie.asset(
+                              options: LottieOptions(
+                                enableApplyingOpacityToLayers: true,
+                              ),
+                              'assets/raw/heart_effect.json',
+                              controller: _controllerFavorite,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Text(
@@ -162,11 +179,10 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                     Row(
                       children: [
                         IconButton(
-                          padding: const EdgeInsets.all(20),
-                          onPressed: () {},
+                          onPressed: widget.commentCallback,
                           icon: SvgPicture.asset("assets/svg/comment.svg",
-                              width: 23,
-                              height: 23,
+                              width: 18,
+                              height: 18,
                               color:
                                   colorScheme(context).scrim.withOpacity(0.7)),
                         ),
@@ -184,11 +200,10 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                       ],
                     ),
                     IconButton(
-                        padding: const EdgeInsets.all(20),
                         onPressed: () {},
                         icon: SvgPicture.asset("assets/svg/share.svg",
-                            width: 23,
-                            height: 23,
+                            width: 18,
+                            height: 18,
                             color:
                                 colorScheme(context).scrim.withOpacity(0.7))),
                   ]),
@@ -211,7 +226,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                         ),
                         Positioned(
                           bottom: 0,
-                          right: 15,
+                          right: 20,
                           child: SizedBox(
                             width: 30,
                             height: 30,
@@ -221,7 +236,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                         ),
                         Positioned(
                           bottom: 0,
-                          right: 30,
+                          right: 40,
                           child: SizedBox(
                             width: 30,
                             height: 30,

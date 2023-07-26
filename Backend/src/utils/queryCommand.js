@@ -16,12 +16,21 @@ module.exports = {
      LEFT JOIN detail_tym ON detail_tym.idPost = posts.id
      GROUP BY  posts.id, detail_tym.idPost
      ORDER BY posts.dateTime DESC
-     LIMIT ?,?`,
-     getTymByIdPostCommand: 'SELECT * FROM DETAIL_TYM WHERE IDPOST = ?',
+     LIMIT ?, ?`,
      getMessagesByIdQuery: "SELECT * FROM messages WHERE idUserSend = ? AND idUserGet = ? OR idUserGet = ? AND idUserSend = ?",
      searchUserMyUsernameQuery: "SELECT * FROM USERS WHERE users.username LIKE ?",
      incrementTymQuery: "INSERT INTO detail_tym(idUser,idPost) VALUES (?,?)",
      tymPostQuery: "INSERT INTO `detail_tym`(`idUser`, `idPost`) VALUES (?,?)",
+     getCountTymByIdPostQuery: 'SELECT COUNT(detail_tym.idPost) as `count` FROM `detail_tym` WHERE idPost = ?',
+     unMyTymByIdUserAndIdPostQuery: 'DELETE FROM `detail_tym` WHERE idUser = ? AND idPost = ?',
+     getIsLiked: 'SELECT detail_tym.idUser, detail_tym.idPost  FROM detail_tym WHERE detail_tym.idUser = ?',
+     getCommentByIdPost:
+          `SELECT comments.id, users.username, 
+          users.avatar, content, dateTime,
+          users.id as "idUser" FROM comments 
+          JOIN users 
+          ON idUser = users.id 
+          WHERE idPost = ?`
 }
 
 // SELECT detail_tym.idUser as "total_like",

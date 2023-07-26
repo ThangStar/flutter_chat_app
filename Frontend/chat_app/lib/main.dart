@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
+import 'package:seller_app/ui/blocs/comment/comment_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_bloc.dart';
 import 'package:seller_app/ui/blocs/search/search_bloc.dart';
+import 'package:seller_app/ui/screens/comment_screen.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/screens/navigation/app_bar_nav_main.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
@@ -66,6 +68,9 @@ class _MyAppState extends State<MyApp> {
             ),
             BlocProvider(
               create: (context) => SearchBloc(),
+            ),
+            BlocProvider(
+              create: (context) => CommentBloc(),
             ),
           ],
           child: MaterialApp(

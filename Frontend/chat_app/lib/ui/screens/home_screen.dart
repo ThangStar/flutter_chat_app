@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/model/post.dart';
-import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/ui/screens/add_post_screen.dart';
 import 'package:seller_app/ui/widgets/avatar_and_action_button.dart';
 import 'package:seller_app/ui/widgets/my_divider.dart';
 import 'package:seller_app/ui/widgets/post_item.dart';
-import 'package:seller_app/storages/storage.dart';
 
 import '../blocs/post/post_bloc.dart';
 import '../widgets/shimmer_loading.dart';
+import 'comment_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     content: "",
                                     dateTime: '',
                                     username: ''),
+                                tymEvent: () {},
                               ),
                               PostItem(
                                 post: Post(
@@ -87,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     content: "",
                                     dateTime: '',
                                     username: ''),
+                                tymEvent: () {},
                               ),
                             ],
                           ),
@@ -102,7 +104,21 @@ class _HomeScreenState extends State<HomeScreen>
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       Post post = state.posts[index];
-                      return PostItem(post: post);
+                      return PostItem(
+                        commentCallback: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommentScreen(post: post),
+                            )),
+                        post: post,
+                        tymEvent: () {
+                          context.read<PostBloc>().add(TymPostEvent(
+                              index: index, postId: post.idPost ?? 0));
+                        },
+                        unTymEvent: () => context.read<PostBloc>().add(
+                            UnTymPostEvent(
+                                index: index, postId: post.idPost ?? 0)),
+                      );
                     },
                     separatorBuilder: (context, index) =>
                         const MyDivider(isPrimary: false),

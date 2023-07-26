@@ -6,6 +6,7 @@ import 'package:seller_app/ui/blocs/message/message_bloc.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/message_chat.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../api/socket_api.dart';
 import '../../model/message.dart';
@@ -13,7 +14,6 @@ import '../../model/profile.dart';
 import '../widgets/container_chat.dart';
 import '../widgets/my_action_button.dart';
 import '../widgets/online_icon.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
   final String avatarUrl;

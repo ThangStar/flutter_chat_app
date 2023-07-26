@@ -34,4 +34,5 @@ class Profile {
     "password": password,
     "avatar": avatar,
   };
+
 }

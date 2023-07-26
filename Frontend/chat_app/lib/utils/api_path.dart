@@ -6,5 +6,9 @@ class ApiPath {
 
   static const uploadAvatar = "/user/avatar";
   static const searchUserByUsername = "/user/search";
-  static const incrementPost = "/tym/increment";
+  static const incTymPost = "/tym/inc";
+  static const decTymPost = "/tym/dec";
+
+  static const getCommentByIdPost = "/comment";
+
 }

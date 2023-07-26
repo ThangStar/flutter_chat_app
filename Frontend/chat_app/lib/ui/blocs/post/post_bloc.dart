@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,6 +19,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<AddPost>(_addPost);
     on<InitPostEvent>(_initPostEvent);
     on<TymPostEvent>(_tymPostEvent);
+    on<UnTymPostEvent>(_unTymPostEvent);
   }
 
   FutureOr<void> _addPost(AddPost event, Emitter<PostState> emit) async {
@@ -51,6 +51,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       if (res is Success) {
         final postsJson = jsonDecode(res.body) as List<dynamic>;
         for (var e in postsJson) {
+          print(e);
           posts.add(Post.fromJson(e ?? ""));
         }
         emit(PostState(posts: posts));
@@ -68,14 +69,43 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       TymPostEvent event, Emitter<PostState> emit) async {
     String? jsonPrf = await Storage.getMyProfile();
     Profile prf = Profile.fromRawJson(jsonPrf ?? "");
+    // print('index- ${event.index} idPost- ${event.postId} myid-${prf.id}');
 
-    Object response = await Api.incrementTymPost(prf.id, event.postId);
+    Object response = await Api.incTymPost(prf.id, event.postId);
 
-    // if(response is Success){
-    //   final newValue = [...state.posts[event.index].totalTym + 1];
-    //   emit(PostState(posts: [...state.posts]))
-    // }else if(response is Failure){
+    if (response is Success) {
+      List<dynamic> counterJson = jsonDecode(response.body) as List<dynamic>;
+      final count = counterJson[0]['count'];
+      print(response.body);
+      List<Post> posts = state.posts;
+      posts[event.index].totalTym = count;
+      emit(PostState(posts: posts));
+      emit(TymFinish(posts: state.posts));
+    } else if (response is Failure) {
+      print(response.body);
+    }
+  }
 
-    // }
+  FutureOr<void> _unTymPostEvent(
+      UnTymPostEvent event, Emitter<PostState> emit) async {
+    String? jsonPrf = await Storage.getMyProfile();
+    Profile prf = Profile.fromRawJson(jsonPrf ?? "");
+    print('index- ${event.index} idPost- ${event.postId} myid-${prf.id}');
+
+    Object response = await Api.decTymPost(prf.id, event.postId);
+
+    if (response is Success) {
+      print(response.body);
+
+      List<dynamic> counterJson = jsonDecode(response.body) as List<dynamic>;
+      final count = counterJson[0]['count'];
+
+      List<Post> posts = state.posts;
+      posts[event.index].totalTym = count;
+      emit(PostState(posts: posts));
+      emit(TymFinish(posts: state.posts));
+    } else if (response is Failure) {
+      print(response.body);
+    }
   }
 }
