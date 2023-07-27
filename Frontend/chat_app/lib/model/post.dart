@@ -6,6 +6,7 @@ import 'dart:convert';
 
 class Post {
   int? totalTym;
+  int? totalComment;
   int? idPost;
   int? id;
   String title;
@@ -14,9 +15,12 @@ class Post {
   String username;
   String? styleColor;
   bool? isLiked;
+  String? avatar;
 
   Post(
-      {this.totalTym,
+      {this.avatar,
+      this.totalComment,
+      this.totalTym,
       this.idPost,
       this.id,
       required this.title,
@@ -31,6 +35,8 @@ class Post {
   String toRawJson() => json.encode(toJson());
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
+      avatar: json['avatar'],
+      totalComment: json['total_comment'],
       totalTym: json['total_tym'],
       idPost: json["id_post"],
       id: json["id"],
@@ -42,6 +48,7 @@ class Post {
       isLiked: bool.parse(json['isLiked'] ?? "false"));
 
   Map<String, dynamic> toJson() => {
+        "avatar": avatar,
         "total_tym": totalTym,
         "id_post": idPost,
         "id": id,
@@ -50,6 +57,7 @@ class Post {
         "dateTime": dateTime,
         "username": username,
         "style_color": styleColor,
-        'isLiked': isLiked
+        'isLiked': isLiked,
+        "total_comment": totalComment
       };
 }

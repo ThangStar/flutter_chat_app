@@ -19,6 +19,9 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  ScrollController controllerComments = ScrollController();
+  bool isCommentting = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,18 +39,45 @@ class _CommentScreenState extends State<CommentScreen> {
         bottomNavigationBar: ContainerChat(
             onTapImage: () {},
             handleActionSend: (txtMessage) {
-              print(txtMessage);
+              controllerComments.animateTo(
+                  controllerComments.position.minScrollExtent,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.bounceOut);
+              context.read<CommentBloc>().add(HandleAddCommentEvent(
+                  content: txtMessage, idPost: widget.post.idPost ?? 0));
             }),
         appBar: AppBar(
+            bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(10),
+                child: BlocListener<CommentBloc, CommentState>(
+                  listener: (context, state) {
+                    if (state is ProgressAddComment) {
+                      setState(() {
+                        isCommentting = true;
+                      });
+                    } else if (state is FinishAddComment){
+                      setState(() {
+                        isCommentting = false;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Đã bình luận"),
+                          backgroundColor: Colors.green));
+                      ;
+                    }
+                  },
+                  child:
+                      isCommentting ? LinearProgressIndicator() : Container(),
+                )),
             leading: const BackButton(),
             title: Text(
-              "Bình luận",
+              isCommentting ? "Đang bình luận.." : "Bình luận",
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             )),
         body: SingleChildScrollView(
+          controller: controllerComments,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,7 +94,7 @@ class _CommentScreenState extends State<CommentScreen> {
                         .bodyLarge!
                         .copyWith(fontWeight: FontWeight.bold),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               BlocBuilder<CommentBloc, CommentState>(
@@ -80,7 +110,7 @@ class _CommentScreenState extends State<CommentScreen> {
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                        SizedBox(
+                        const SizedBox(
                       height: 16,
                     ),
                   );

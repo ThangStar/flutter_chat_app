@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:seller_app/ui/screens/comment_screen.dart';
+import 'package:seller_app/constants/constants.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
@@ -10,7 +10,11 @@ import '../../model/post.dart';
 
 class PostItem extends StatefulWidget {
   const PostItem(
-      {super.key, required this.post, this.tymEvent, this.unTymEvent, this.commentCallback});
+      {super.key,
+      required this.post,
+      this.tymEvent,
+      this.unTymEvent,
+      this.commentCallback});
 
   final Post post;
   final Function()? tymEvent;
@@ -29,10 +33,8 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     isFavorite = widget.post.isLiked ?? false;
-    _controllerFavorite = AnimationController(
-      vsync: this,
-      value: isFavorite ? 1 : 0
-    );
+    _controllerFavorite =
+        AnimationController(vsync: this, value: isFavorite ? 1 : 0);
   }
 
   @override
@@ -53,8 +55,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/avatar.png")),
+                  Avatar(url: widget.post.avatar ?? ""),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -187,7 +188,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                                   colorScheme(context).scrim.withOpacity(0.7)),
                         ),
                         Text(
-                          "20",
+                          widget.post.totalComment.toString() ?? "0",
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge

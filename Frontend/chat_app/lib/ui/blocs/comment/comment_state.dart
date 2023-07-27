@@ -12,6 +12,15 @@ class CommentState extends Equatable {
 class FetchingCommentState extends CommentState {
   const FetchingCommentState({required super.comments});
 }
-class FinishFetchCommentState extends CommentState{
-  FinishFetchCommentState({required super.comments});
+
+class FinishFetchCommentState extends CommentState {
+  const FinishFetchCommentState({required super.comments});
+}
+
+class ProgressAddComment extends CommentState {
+  const ProgressAddComment({required super.comments});
+}
+
+class FinishAddComment extends CommentState {
+  const FinishAddComment({required super.comments});
 }

@@ -4,13 +4,22 @@ module.exports = {
      addAPost: 'INSERT INTO posts(idUser, title, content, style_color) VALUES (?,?,?,?)',
      getAllPost: `
      SELECT COUNT(detail_tym.idUser) as "total_tym",
+     (
+          SELECT COUNT(*) FROM comments WHERE posts.id = comments.idPost
+     ) total_comment,
      posts.id AS "id_post", 
      users.id,
+     users.avatar,
      posts.title,
      posts.content,
      posts.dateTime,
      posts.style_color,
-     users.username 
+     users.username,
+     CASE WHEN EXISTS (SELECT 1 FROM detail_tym 
+          WHERE detail_tym.idPost = posts.id 
+          AND detail_tym.idUser = 4) 
+          THEN 'true'  ELSE 'false'  	
+     END AS isLiked 
      FROM posts 
      JOIN users ON users.id = posts.idUser
      LEFT JOIN detail_tym ON detail_tym.idPost = posts.id
@@ -27,10 +36,15 @@ module.exports = {
      getCommentByIdPost:
           `SELECT comments.id, users.username, 
           users.avatar, content, dateTime,
+          IF(idUser = 1, "true", "false") my_comment,
           users.id as "idUser" FROM comments 
           JOIN users 
           ON idUser = users.id 
-          WHERE idPost = ?`
+          WHERE idPost = ?
+          ORDER BY comments.dateTime DESC`,
+     insertCommentQuery: `INSERT INTO comments
+     (idUser, idPost, content) 
+     VALUES (?, ?, ?)`,
 }
 
 // SELECT detail_tym.idUser as "total_like",

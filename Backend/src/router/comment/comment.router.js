@@ -1,9 +1,9 @@
 const express = require('express')
-const { getByidPost } = require('../../controller/commentController')
+const { getByidPost, insert } = require('../../controller/commentController')
 const router = express.Router()
 
 router.get('/', getByidPost)
-// router.post('/add', addPost)
+router.post('/add', insert)
 
 
 module.exports = router

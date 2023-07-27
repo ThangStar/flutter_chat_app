@@ -29,3 +29,13 @@ Content-Type: application/json
 GET {{urldev}}/comment
      ?idPost=50
 Content-Type: application/json
+
+###add comment
+POST {{urldev}}/comment/add
+Content-Type: application/json
+
+{
+     "idUser": 1,
+     "idPost": 50,
+     "content": "GOOD JOB!"
+}

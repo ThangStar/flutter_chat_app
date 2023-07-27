@@ -142,11 +142,11 @@ class Api {
     }
   }
 
-
   static Future<Object> decTymPost(int myId, int postId) async {
     try {
-      Response response = await Http().dio.post(ApiPath.decTymPost,
-          data: {"idUser": myId, "idPost": postId});
+      Response response = await Http()
+          .dio
+          .post(ApiPath.decTymPost, data: {"idUser": myId, "idPost": postId});
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }
@@ -158,13 +158,29 @@ class Api {
 
   static Future<Object> getCommentById(int idPost) async {
     try {
-      Response response = await Http().dio.get(ApiPath.getCommentByIdPost,
-          queryParameters: {"idPost": idPost});
+      Response response = await Http()
+          .dio
+          .get(ApiPath.getCommentByIdPost, queryParameters: {"idPost": idPost});
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }
       return Failure(body: response.data);
     } catch (e) {
+      return Failure(message: 'error get comment');
+    }
+  }
+
+  static Future<Object> addComment(
+      int idUser, int idPost, String content) async {
+    try {
+      Response response = await Http().dio.post(ApiPath.insertComment,
+          data: {"idPost": idPost, "idUser": idUser, "content": content});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      print(e);
       return Failure(message: 'error get comment');
     }
   }

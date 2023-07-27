@@ -11,6 +11,7 @@ class Comment {
   String content;
   DateTime dateTime;
   int idUser;
+  bool myComment;
 
   Comment({
     required this.id,
@@ -19,6 +20,7 @@ class Comment {
     required this.content,
     required this.dateTime,
     required this.idUser,
+    required this.myComment
   });
 
   factory Comment.fromRawJson(String str) => Comment.fromJson(json.decode(str));
@@ -32,6 +34,7 @@ class Comment {
     content: json["content"],
     dateTime: DateTime.parse(json["dateTime"]),
     idUser: json["idUser"],
+    myComment: bool.parse(json["my_comment"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class Comment {
     "content": content,
     "dateTime": dateTime.toIso8601String(),
     "idUser": idUser,
+    "my_comment": myComment
   };
 }

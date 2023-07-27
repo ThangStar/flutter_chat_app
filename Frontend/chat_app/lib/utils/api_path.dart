@@ -10,5 +10,6 @@ class ApiPath {
   static const decTymPost = "/tym/dec";
 
   static const getCommentByIdPost = "/comment";
+  static const insertComment = "/comment/add";
 
 }
