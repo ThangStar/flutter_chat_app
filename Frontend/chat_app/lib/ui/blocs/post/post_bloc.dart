@@ -43,10 +43,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   FutureOr<void> _initPostEvent(
       InitPostEvent event, Emitter<PostState> emit) async {
+    String? jsonPrf = await Storage.getMyProfile();
+    Profile prf = Profile.fromRawJson(jsonPrf ?? "");
     emit(LoadingPost(posts: state.posts));
     await Future.delayed(const Duration(seconds: 2));
     try {
-      Object res = await Api.getPostById();
+      Object res = await Api.getPostByIdUser(prf.id);
       List<Post> posts = [];
       if (res is Success) {
         final postsJson = jsonDecode(res.body) as List<dynamic>;

@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     Storage.getMyProfile().then((value) {
       Profile profile = Profile.fromRawJson(value ?? "");
       setState(() {
-        fullname = profile.username;
+        fullname = profile.fullName;
       });
     });
   }
@@ -225,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     title: "",
                                     content: "",
                                     dateTime: '',
-                                    username: ''),
+                                    username: '', fullName: ''),
                                 tymEvent: () {},
                               ),
                               PostItem(
@@ -233,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     title: "",
                                     content: "",
                                     dateTime: '',
-                                    username: ''),
+                                    username: '', fullName: ''),
                                 tymEvent: () {},
                               ),
                               PostItem(
@@ -241,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     title: "",
                                     content: "",
                                     dateTime: '',
-                                    username: ''),
+                                    username: '', fullName: ''),
                                 tymEvent: () {},
                               ),
                             ],

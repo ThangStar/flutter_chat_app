@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/storages/storage.dart';
+import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/ui/widgets/my_button.dart';
 
 import '../../model/profile.dart';
@@ -14,8 +15,6 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  String fullname = '';
-
   List<Color> colors = [
     Colors.grey.withOpacity(0.1),
     const Color(0xFF6E85E3),
@@ -37,7 +36,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool isChangeColor = false;
   TextEditingController controllerTitle = TextEditingController();
   TextEditingController controllerContent = TextEditingController();
-  late Profile profile;
+  Profile profile = Profile(
+      id: 1,
+      username: "username",
+      fullName: "fullName",
+      password: "password",
+      avatar: "avatar");
   bool isPostting = false;
   final ScrollController _scrollMain = ScrollController();
 
@@ -47,9 +51,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     try {
       Storage.getMyProfile().then((value) {
         if (value != null) {
-          profile = Profile.fromRawJson(value ?? "");
           setState(() {
-            fullname = profile.username;
+            profile = Profile.fromRawJson(value ?? "");
           });
         }
       });
@@ -113,12 +116,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/avatar.png")),
+                  Avatar(
+                      url: profile.avatar),
                   const SizedBox(
                     width: 17,
                   ),
-                  Text(fullname)
+                  Text(profile.fullName )
                 ],
               ),
             ),

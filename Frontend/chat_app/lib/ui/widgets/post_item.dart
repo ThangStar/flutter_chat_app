@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:seller_app/constants/constants.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
 
+import '../../constants/constants.dart';
 import '../../model/post.dart';
 
 class PostItem extends StatefulWidget {
@@ -60,7 +60,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget.post.username,
+                        "${widget.post.fullName}",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge
@@ -208,43 +208,58 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                             color:
                                 colorScheme(context).scrim.withOpacity(0.7))),
                   ]),
-                  const SizedBox(
+                  SizedBox(
                     width: 90,
                     height: 43,
                     child: Stack(
                       fit: StackFit.expand,
                       clipBehavior: Clip.antiAlias,
                       children: [
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Avatar(
-                                url: 'avatar-1689384802173-863137306.png'),
-                          ),
+                        ListView.builder(
+                          itemCount:
+                              widget.post.avatarsLiked!.split(',').length > 2
+                                  ? 3
+                                  : widget.post.avatarsLiked?.split(',').length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          primary: false,
+                          itemBuilder: (BuildContext context, int index) {
+                            String? urlAvatar =
+                                widget.post.avatarsLiked?.split(',')[index];
+                            return index == 2
+                                ? SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFFF62F63),
+                                        child: Text(
+                                          "+${ widget.post.avatarsLiked!.split(',').length - 2}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                  color: colorScheme(context)
+                                                      .onPrimary),
+                                        ),
+                                      ),
+                                    ))
+                                : SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: CircleAvatar(
+                                          backgroundColor:Colors.black,
+                                          backgroundImage: NetworkImage(
+                                              "${Constants.BASE_URL}/images/$urlAvatar"),
+                                        )),
+                                  );
+                          },
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 20,
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Avatar(
-                                url: 'avatar-1689384802173-863137306.png'),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 40,
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Avatar(
-                                url: 'avatar-1689384802173-863137306.png'),
-                          ),
-                        ),
+
                         // Container(
                         //   width: 30,
                         //   height: 30,

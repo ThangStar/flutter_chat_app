@@ -89,7 +89,7 @@ class SearchUserDelegate extends SearchDelegate {
                       ),
                     ),
                     leading: Avatar(url: user.avatar),
-                    title: Text(user.username),
+                    title: Text(user.fullName),
                   );
                 });
       },

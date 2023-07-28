@@ -24,3 +24,11 @@ class ProgressAddComment extends CommentState {
 class FinishAddComment extends CommentState {
   const FinishAddComment({required super.comments});
 }
+
+class ProgressDeleteOneComment extends CommentState{
+  const ProgressDeleteOneComment({required super.comments});
+}
+class FinishDeleteOneComment extends CommentState{
+  const FinishDeleteOneComment({required super.comments});
+
+}

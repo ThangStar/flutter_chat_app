@@ -52,7 +52,7 @@ class _UtilsScreenState extends State<UtilsScreen> {
                       ));
                 },
                 leading: Avatar(url: state.profile.avatar),
-                title: Text(state.profile.username),
+                title: Text(state.profile.fullName),
                 subtitle: const Text("Xem trang cá nhân"),
                 trailing: const Icon(Icons.keyboard_arrow_down),
               );

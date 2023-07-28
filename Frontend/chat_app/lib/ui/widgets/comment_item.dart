@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/utils/role.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
 
 import '../../model/comment.dart';
+import '../../storages/storage.dart';
 
-class CommentItem extends StatelessWidget {
+class CommentItem extends StatefulWidget {
   final Comment comment;
 
   const CommentItem({super.key, required this.comment});
 
+  @override
+  State<CommentItem> createState() => _CommentItemState();
+}
+
+class _CommentItemState extends State<CommentItem> {
+  @override
+  void initState()  {
+    print(widget.comment.myComment);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,7 +29,7 @@ class CommentItem extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(flex: 1, child: Avatar(url: comment.avatar)),
+            Expanded(flex: 1, child: Avatar(url: widget.comment.avatar)),
             Expanded(
               flex: 8,
               child: Column(
@@ -27,7 +39,7 @@ class CommentItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 15),
                     decoration: BoxDecoration(
-                        color: comment.myComment
+                        color: widget.comment.myComment
                             ? colorScheme(context).tertiary.withOpacity(0.3)
                             : colorScheme(context).tertiary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8)),
@@ -38,33 +50,35 @@ class CommentItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              comment.username,
-                              style: Theme.of(context)
+                              widget.comment.fullName,
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Text(
-                              comment.content,
-                              style: Theme.of(context)
+                              widget.comment.content,
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                      color: colorScheme(context)
-                                          .scrim
-                                          .withOpacity(0.6)),
+                                  color: colorScheme(context)
+                                      .scrim
+                                      .withOpacity(0.6)),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   Row(
@@ -73,50 +87,69 @@ class CommentItem extends StatelessWidget {
                         onTap: () {},
                         child: Text(
                           "Thích",
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  color: colorScheme(context).primary,
-                                  fontWeight: FontWeight.bold),
+                              color: colorScheme(context).primary,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       InkWell(
                         onTap: () {},
                         child: Text("Phản hồi",
-                            style: Theme.of(context)
+                            style: Theme
+                                .of(context)
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                    color: colorScheme(context).primary,
-                                    fontWeight: FontWeight.bold)),
+                                color: colorScheme(context).primary,
+                                fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
-                      Text(spacingDateToNow(comment.dateTime),
-                          style: Theme.of(context)
+                      Text(spacingDateToNow(widget.comment.dateTime),
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  color: colorScheme(context)
-                                      .scrim
-                                      .withOpacity(0.6))),
+                              color: colorScheme(context)
+                                  .scrim
+                                  .withOpacity(0.6))),
                     ],
                   )
                 ],
               ),
             ),
-            Expanded(
-                child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_horiz_outlined)))
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: PopupMenuButton(
+                  onSelected: (value) {
+                    print("value selected: ${value}");
+                  },
+                  itemBuilder: (context) {
+                    return widget.comment.myComment ? Role.myComment.map((e) => PopupMenuItem(
+                        value: e["value"],
+                        child: Text(e["content"] ?? ""),
+                      )).toList()
+                        :
+                    Role.otherComment.map((e) => PopupMenuItem(
+                      value: e["value"],
+                      child: Text(e["content"] ?? ""),
+                    )).toList();
+
+                  },
+                ))
           ],
         ),
       ],
     );
   }
 }
+

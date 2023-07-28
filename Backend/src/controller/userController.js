@@ -58,7 +58,7 @@ const login = (req, res) => {
      const username = req.body.username;
      const password = req.body.password;
      console.log('query login: ', req.body);
-     const queryString = `SELECT * FROM USERS WHERE USERNAME = ? AND PASSWORD = ?`
+     const queryString = `SELECT username, password, id, avatar, fullname as full_name FROM USERS WHERE USERNAME = ? AND PASSWORD = ?`
      conn.query(queryString, [username, password], (err, rs, field) => {
           if (err) {
                res.send(toJson({

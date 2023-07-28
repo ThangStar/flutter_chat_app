@@ -17,15 +17,15 @@ require('./src/utils/sendOTP').transporter
 
 app.use(
   cors({
-    origin: "http://localhost:53178",
+    origin: "http://localhost:50757",
     credentials: true,
     exposedHeaders: ["Access-Control-Allow-Origin"],
   })
 );
 
 
-const PORT_SOCKET = process.env.PORT_SOCKET | 2000
-const PORT_SERVER = process.env.PORT_SERVER | 2001
+const PORT_SOCKET = process.env.PORT_SOCKET | 3001
+const PORT_SERVER = process.env.PORT_SERVER | 3000
 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json

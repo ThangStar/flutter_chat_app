@@ -6,6 +6,7 @@ import 'dart:convert';
 
 class Comment {
   int id;
+  String fullName;
   String username;
   String avatar;
   String content;
@@ -14,6 +15,7 @@ class Comment {
   bool myComment;
 
   Comment({
+    required this.fullName,
     required this.id,
     required this.username,
     required this.avatar,
@@ -35,6 +37,7 @@ class Comment {
     dateTime: DateTime.parse(json["dateTime"]),
     idUser: json["idUser"],
     myComment: bool.parse(json["my_comment"]),
+    fullName: json['full_name'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +47,7 @@ class Comment {
     "content": content,
     "dateTime": dateTime.toIso8601String(),
     "idUser": idUser,
-    "my_comment": myComment
+    "my_comment": myComment,
+    "full_name": fullName
   };
 }

@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     title: "",
                                     content: "",
                                     dateTime: '',
-                                    username: ''),
+                                    username: '', fullName: ''),
                                 tymEvent: () {},
                               ),
                               PostItem(
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     title: "",
                                     content: "",
                                     dateTime: '',
-                                    username: ''),
+                                    username: '', fullName: ''),
                                 tymEvent: () {},
                               ),
                             ],

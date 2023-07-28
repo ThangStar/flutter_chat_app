@@ -12,7 +12,7 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc()
       : super(ProfileState(
-            profile: Profile(id: 0, username: "", password: "", avatar: ""))) {
+            profile: Profile(id: 0, username: "", password: "", avatar: "", fullName: ''))) {
     on<InitProfileEvent>(_initProfileEvent);
   }
 

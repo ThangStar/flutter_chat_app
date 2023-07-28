@@ -29,7 +29,7 @@ class MessageScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<MessageScreen> {
   late PersonChattedBloc _chattedBloc;
-  String username = "";
+  String fullName = "";
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _ChatScreenState extends State<MessageScreen> {
     Storage.getMyProfile().then((value) {
       Profile prf = Profile.fromRawJson(value ?? "");
       setState(() {
-        username = prf.username;
+        fullName = prf.fullName;
       });
 
       _chattedBloc = BlocProvider.of<PersonChattedBloc>(context);
@@ -81,7 +81,7 @@ class _ChatScreenState extends State<MessageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Chào ${username},",
+              "Chào ${fullName},",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: colorScheme(context).scrim.withOpacity(0.6)),
             ),
@@ -150,7 +150,7 @@ class _ChatContentState extends State<ChatContent> {
                         MaterialPageRoute(
                           builder: (context) => ChatScreen(
                               idUserChatting: person.id,
-                              fullNameUserChatting: person.username,
+                              fullNameUserChatting: person.fullName,
                               avatarUrl:
                                   "${Constants.BASE_URL}/images/${person.avatar}"),
                         ));
@@ -163,7 +163,7 @@ class _ChatContentState extends State<ChatContent> {
                   ),
                   leading: Avatar(url: person.avatar),
                   title: Text(
-                    person.username,
+                    person.fullName,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge
@@ -215,7 +215,7 @@ class NearUserChatted extends StatelessWidget {
                     const SizedBox(
                       width: 18,
                     ),
-                    avatarMessage(person.username, person.avatar, context),
+                    avatarMessage(person.fullName, person.avatar, context),
                   ],
                 );
               });

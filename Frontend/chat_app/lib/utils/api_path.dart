@@ -2,7 +2,7 @@ class ApiPath {
   static const login = "/user/login";
   static const messageOfUser = "/messages/messageOfUser";
   static const addPost = "/post/add";
-  static const getPostById = "/post";
+  static const getPostByIdUser = "/post";
 
   static const uploadAvatar = "/user/avatar";
   static const searchUserByUsername = "/user/search";
@@ -11,5 +11,7 @@ class ApiPath {
 
   static const getCommentByIdPost = "/comment";
   static const insertComment = "/comment/add";
+
+  static const deleteOneComment = "/comment/deleteOne";
 
 }

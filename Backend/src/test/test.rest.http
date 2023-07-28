@@ -1,4 +1,4 @@
-@urldev = http://localhost:2001
+@urldev = http://localhost:3000
 
 ### get all post
 GET {{urldev}}/post
@@ -38,4 +38,13 @@ Content-Type: application/json
      "idUser": 1,
      "idPost": 50,
      "content": "GOOD JOB!"
+}
+
+###deleteOne comment
+POST {{urldev}}/comment/deleteOne
+Content-Type: application/json
+
+{
+     "idComment": 1,
+     "idPost": 50
 }

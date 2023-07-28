@@ -24,8 +24,10 @@ const addPost = async (req, res) => {
 }
 
 const getPostById = (req, res) => {
-     console.log(req.originalUrl);
      try {
+          console.log(req.originalUrl);
+          console.log(req.query);
+          const { idUser } = req.query
           const _page = Number(req.query._page) || 0
           const _perpage = Number(req.query._perpage) || 10
           var cache = myCache.get(pathCache.PostData)
@@ -38,7 +40,7 @@ const getPostById = (req, res) => {
           } else {
                myCache.set(pathCache.PostUrl, req.originalUrl)
                console.log('data from DB');
-               conn.query(getAllPost, [_page, _perpage], (err, rs, field) => {
+               conn.query(getAllPost, [idUser, _page, _perpage], (err, rs, field) => {
                     err ?
                          res.json(err)
                          :

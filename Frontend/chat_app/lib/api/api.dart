@@ -62,9 +62,11 @@ class Api {
     }
   }
 
-  static Future<Object> getPostById() async {
+  static Future<Object> getPostByIdUser(int idUser) async {
     try {
-      Response res = await Http().dio.get(ApiPath.getPostById);
+      Response res = await Http()
+          .dio
+          .get(ApiPath.getPostByIdUser, queryParameters: {"idUser": idUser});
       if (res.statusCode == 200) {
         return Success(body: res.data);
       }
@@ -158,9 +160,11 @@ class Api {
 
   static Future<Object> getCommentById(int idPost) async {
     try {
-      Response response = await Http()
-          .dio
-          .get(ApiPath.getCommentByIdPost, queryParameters: {"idPost": idPost});
+      String? jsonProfile = await Storage.getMyProfile();
+      Profile profile = Profile.fromRawJson(jsonProfile ?? "");
+
+      Response response = await Http().dio.get(ApiPath.getCommentByIdPost,
+          queryParameters: {"idPost": profile.id, "idPost": idPost});
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }
@@ -182,6 +186,22 @@ class Api {
     } catch (e) {
       print(e);
       return Failure(message: 'error get comment');
+    }
+  }
+
+  static Future<Object> deleteOneComment(int idPost, int idComment) async {
+    try {
+      String? jsonProfile = await Storage.getMyProfile();
+      Profile profile = Profile.fromRawJson(jsonProfile ?? "");
+
+      Response response = await Http().dio.post(ApiPath.deleteOneComment,
+          data: {"idUser": profile.id, "idPost": idPost, "idComment": idComment});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error deleteOne comment');
     }
   }
 }

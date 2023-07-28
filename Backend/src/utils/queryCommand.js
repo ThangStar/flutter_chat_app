@@ -1,5 +1,5 @@
 module.exports = {
-     messageOfUser: 'SELECT users.avatar, users.id, users.username, messages.message, messages.dateTime ' +
+     messageOfUser: 'SELECT users.avatar, users.id, users.username, users.fullname as full_name, messages.message, messages.dateTime ' +
           'FROM users JOIN messages on messages.idUserSend = users.id OR messages.idUserGet = users.id  WHERE messages.idUserSend = ? OR messages.idUserGet = ? GROUP by users.id',
      addAPost: 'INSERT INTO posts(idUser, title, content, style_color) VALUES (?,?,?,?)',
      getAllPost: `
@@ -7,6 +7,7 @@ module.exports = {
      (
           SELECT COUNT(*) FROM comments WHERE posts.id = comments.idPost
      ) total_comment,
+     GROUP_CONCAT(users.avatar) avatar_liked,
      posts.id AS "id_post", 
      users.id,
      users.avatar,
@@ -14,10 +15,12 @@ module.exports = {
      posts.content,
      posts.dateTime,
      posts.style_color,
+     users.fullname as full_name,
      users.username,
+     
      CASE WHEN EXISTS (SELECT 1 FROM detail_tym 
           WHERE detail_tym.idPost = posts.id 
-          AND detail_tym.idUser = 4) 
+          AND detail_tym.idUser = ?) 
           THEN 'true'  ELSE 'false'  	
      END AS isLiked 
      FROM posts 
@@ -27,16 +30,17 @@ module.exports = {
      ORDER BY posts.dateTime DESC
      LIMIT ?, ?`,
      getMessagesByIdQuery: "SELECT * FROM messages WHERE idUserSend = ? AND idUserGet = ? OR idUserGet = ? AND idUserSend = ?",
-     searchUserMyUsernameQuery: "SELECT * FROM USERS WHERE users.username LIKE ?",
+     searchUserMyUsernameQuery: "SELECT users.fullname as full_name, username, id, password, avatar FROM USERS WHERE users.fullname LIKE ?",
      incrementTymQuery: "INSERT INTO detail_tym(idUser,idPost) VALUES (?,?)",
      tymPostQuery: "INSERT INTO `detail_tym`(`idUser`, `idPost`) VALUES (?,?)",
      getCountTymByIdPostQuery: 'SELECT COUNT(detail_tym.idPost) as `count` FROM `detail_tym` WHERE idPost = ?',
      unMyTymByIdUserAndIdPostQuery: 'DELETE FROM `detail_tym` WHERE idUser = ? AND idPost = ?',
      getIsLiked: 'SELECT detail_tym.idUser, detail_tym.idPost  FROM detail_tym WHERE detail_tym.idUser = ?',
      getCommentByIdPost:
-          `SELECT comments.id, users.username, 
+          `SELECT comments.id, users.username,  
+          users.fullname as full_name,
           users.avatar, content, dateTime,
-          IF(idUser = 1, "true", "false") my_comment,
+          IF(idUser = ?, "true", "false") my_comment,
           users.id as "idUser" FROM comments 
           JOIN users 
           ON idUser = users.id 
@@ -45,6 +49,8 @@ module.exports = {
      insertCommentQuery: `INSERT INTO comments
      (idUser, idPost, content) 
      VALUES (?, ?, ?)`,
+     deleteCommentQuery: 'DELETE FROM `comments` WHERE id = ?',
+
 }
 
 // SELECT detail_tym.idUser as "total_like",

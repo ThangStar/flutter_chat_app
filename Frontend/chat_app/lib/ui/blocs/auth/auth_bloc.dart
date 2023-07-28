@@ -27,7 +27,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Object object = await Api.login(event.username, event.password);
     if (object is Success) {
       LoginResponse loginResponse = LoginResponse.fromRawJson(object.body);
-      print(loginResponse.message);
       String jsonProfile = jsonEncode(loginResponse.profile.toJson());
       await Storage.saveMyProfile(jsonProfile);
       emit(LoginSuccess());

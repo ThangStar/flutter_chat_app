@@ -20,3 +20,10 @@ class HandleAddCommentEvent extends CommentEvent {
 
   const HandleAddCommentEvent({required this.content, required this.idPost});
 }
+
+class HandleDeleteOneCommentEvent extends CommentEvent{
+  final int idComment;
+  final int idPost;
+
+  const HandleDeleteOneCommentEvent({required this.idComment, required this.idPost});
+}

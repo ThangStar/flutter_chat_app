@@ -9,10 +9,12 @@ class Profile {
   String username;
   String password;
   String avatar;
+  String fullName;
 
   Profile({
     required this.id,
     required this.username,
+    required this.fullName,
     required this.password,
     required this.avatar,
   });
@@ -23,6 +25,7 @@ class Profile {
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
     id: json["id"],
+    fullName: json['full_name'],
     username: json["username"],
     password: json["password"],
     avatar: json["avatar"],
@@ -33,6 +36,7 @@ class Profile {
     "username": username,
     "password": password,
     "avatar": avatar,
+    "full_name": fullName
   };
 
 }

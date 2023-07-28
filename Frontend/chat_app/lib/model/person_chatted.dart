@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 class PersonChatted {
+  String fullName;
   String avatar;
   int id;
   String username;
@@ -12,6 +13,7 @@ class PersonChatted {
   String dateTime;
 
   PersonChatted({
+    required this.fullName,
     required this.avatar,
     required this.id,
     required this.username,
@@ -24,6 +26,7 @@ class PersonChatted {
   String toRawJson() => json.encode(toJson());
 
   factory PersonChatted.fromJson(Map<String, dynamic> json) => PersonChatted(
+    fullName: json['full_name'],
     avatar: json["avatar"],
     id: json["id"],
     username: json["username"],
@@ -37,5 +40,6 @@ class PersonChatted {
     "username": username,
     "message": message,
     "dateTime": dateTime,
+    "full_name": fullName
   };
 }

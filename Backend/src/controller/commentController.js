@@ -1,13 +1,13 @@
 const conn = require("../API/mySql.api");
 const toJson = require("../utils/ToJson");
 
-const { getCommentByIdPost, insertCommentQuery } = require("../utils/queryCommand");
+const { getCommentByIdPost, insertCommentQuery, deleteCommentQuery } = require("../utils/queryCommand");
 
 const getByidPost = (req, res) => {
      try {
-          const { idPost } = req.query
+          const {idUser, idPost } = req.query
           console.log(idPost);
-          conn.query(getCommentByIdPost, [idPost], (err, rs, field) => {
+          conn.query(getCommentByIdPost, [idUser, idPost], (err, rs, field) => {
                err ? res.send(toJson({
                     result: 'error request comment'
                })).status(400)
@@ -24,6 +24,7 @@ const getByidPost = (req, res) => {
 const insert = (req, res) => {
      var response = []
      try {
+     const { idUser, idPost, content } = req.body
           conn.beginTransaction(err => {
                if (err) conn.rollback()
                else
@@ -31,7 +32,7 @@ const insert = (req, res) => {
                          if (err) return conn.rollback()
 
                     })
-               conn.query(getCommentByIdPost, [idPost], (err, rs, field) => {
+               conn.query(getCommentByIdPost, [idUser, idPost], (err, rs, field) => {
                     if (err) return conn.rollback()
                     else response = rs
                })
@@ -41,9 +42,7 @@ const insert = (req, res) => {
                     else return res.send(toJson(response)).status(200)
                })
           })
-          const { idUser, idPost, content } = req.body
           console.log(req.body);
-
 
      } catch (error) {
           console.log(error);
@@ -53,4 +52,35 @@ const insert = (req, res) => {
      }
 }
 
-module.exports = { getByidPost, insert }
+const deleteOne = (req, res) => {
+     var response = []
+     try {
+          const {idUser, idPost, idComment } = req.body
+          console.log(req.body);
+          conn.beginTransaction(err => {
+               if (err) conn.rollback()
+               else
+                    conn.query(deleteCommentQuery, [idComment], (err, rs, field) => {
+                         if (err) return conn.rollback()
+
+                    })
+               conn.query(getCommentByIdPost, [idUser, idPost], (err, rs, field) => {
+                    if (err) return conn.rollback()
+                    else response = rs
+               })
+
+               conn.commit(err => {
+                    if (err) return conn.rollback()
+                    else return res.send(toJson(response)).status(200)
+               })
+          })
+
+     } catch (error) {
+          console.log(error);
+          res.send(toJson({
+               result: 'error delete comment'
+          })).status(400)
+     }
+}
+
+module.exports = { getByidPost, insert, deleteOne }
