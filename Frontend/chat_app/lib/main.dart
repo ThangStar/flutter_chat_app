@@ -9,7 +9,10 @@ import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_bloc.dart';
 import 'package:seller_app/ui/blocs/search/search_bloc.dart';
+import 'package:seller_app/ui/screens/add_product_screen.dart';
 import 'package:seller_app/ui/screens/comment_screen.dart';
+import 'package:seller_app/ui/screens/courses_test/animation_demo.dart';
+import 'package:seller_app/ui/screens/courses_test/drawer_demo.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/screens/navigation/app_bar_nav_main.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
@@ -84,7 +87,7 @@ class _MyAppState extends State<MyApp> {
                   colorScheme: darkColorScheme,
                   textTheme: textTheme),
               themeMode: currentMode,
-              home: const LoginScreen()),
+              home: const AnimationDemo()),
         );
       },
     );

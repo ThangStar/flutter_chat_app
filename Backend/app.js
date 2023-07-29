@@ -17,7 +17,7 @@ require('./src/utils/sendOTP').transporter
 
 app.use(
   cors({
-    origin: "http://localhost:50757",
+    origin: "http://localhost:50266",
     credentials: true,
     exposedHeaders: ["Access-Control-Allow-Origin"],
   })
@@ -61,6 +61,9 @@ app.use('/post', postRouter)
 app.use('/tym', tymRouter)
 app.use('/auth', authRouter)
 app.use('/comment', commentRouter)
+
+//lab 7 trên lớp
+// app.use('/product', productRouter)
 
 
 
