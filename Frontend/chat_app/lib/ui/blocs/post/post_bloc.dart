@@ -21,6 +21,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<InitPostEvent>(_initPostEvent);
     on<TymPostEvent>(_tymPostEvent);
     on<UnTymPostEvent>(_unTymPostEvent);
+    on<DeletePostEvent>(_deletePostEvent);
   }
 
   FutureOr<void> _addPost(AddPost event, Emitter<PostState> emit) async {
@@ -28,8 +29,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     await Future.delayed(const Duration(seconds: 3));
 
     try {
-      Object res = await Api.addPost(
-          event.title, event.content, event.idUser, event.styleColor, event.imageSelected);
+      Object res = await Api.addPost(event.title, event.content, event.idUser,
+          event.styleColor, event.imageSelected);
       if (res is Success) {
         emit(AddPostSucces(posts: state.posts));
       } else if (res is Failure) {
@@ -108,6 +109,26 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(TymFinish(posts: state.posts));
     } else if (response is Failure) {
       print(response.body);
+    }
+  }
+
+  FutureOr<void> _deletePostEvent(
+      DeletePostEvent event, Emitter<PostState> emit) async {
+        print("event.idPost ${event.idPost}");
+    emit(ProgressDeletePostState(posts: state.posts));
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      Object response = await Api.deletePost(event.idPost);
+      if (response is Success) {
+        emit(SuccessDeletePostState(posts: state.posts..removeWhere((element) => element.idPost == event.idPost)));
+      } else if (response is Failure) {
+        print("FAILURE");
+        emit(FailureDeletePostState(posts: state.posts));
+      }
+    } catch (e) {
+      emit(FailureDeletePostState(posts: state.posts));
+    } finally {
+      emit(FinishDeletePostState(posts: state.posts));
     }
   }
 }

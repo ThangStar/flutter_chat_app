@@ -51,7 +51,8 @@ module.exports = {
      (idUser, idPost, content) 
      VALUES (?, ?, ?)`,
      deleteCommentQuery: 'DELETE FROM `comments` WHERE id = ?',
-     updateAvatarQuery: `UPDATE users SET avatar = ? WHERE users.id = ?`
+     updateAvatarQuery: `UPDATE users SET avatar = ? WHERE users.id = ?`,
+     detelePostByIdQuery: "DELETE FROM posts WHERE id = ?"
 
 }
 

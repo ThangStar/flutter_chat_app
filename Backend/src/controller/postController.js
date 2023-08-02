@@ -2,7 +2,7 @@ const conn = require("../API/mySql.api");
 const toJson = require("../utils/ToJson");
 const NodeCache = require("node-cache");
 
-const { addAPost, getAllPost, getTymByIdPostCommand, tymPostQuery } = require("../utils/queryCommand");
+const { addAPost, getAllPost, getTymByIdPostCommand, detelePostByIdQuery } = require("../utils/queryCommand");
 const { myCache, KEY_CACHE } = require("../utils/nodeCache");
 const pathCache = require("../storage/cache.storage");
 
@@ -13,9 +13,9 @@ const addPost = async (req, res) => {
      const images = req.files.map(e => e.filename).join(',')
      conn.query(addAPost, [idUser, title, images, content, style_color], (err, rs, field) => {
           if (err) {
-     res.status(400).send(toJson({
-          status: 'ERROR'
-     }))
+               res.status(400).send(toJson({
+                    status: 'ERROR'
+               }))
           } else {
                res.status(200).send(toJson(rs))
           }
@@ -77,5 +77,24 @@ const getTymByIdPost = (req, res) => {
 }
 
 
+const deleteById = (req, res) => {
+     try {
+          const { idPost } = req.body
+          conn.query(detelePostByIdQuery, [idPost], (err, rs, field) => {
+               err ? res.status(400).send(toJson({
+                    results: 'error delete'
+               }))
+                    :
+                    res.status(200).send(toJson(rs))
+          })
+     } catch (error) {
+          res.send(toJson({
+               results: 'error delete'
+          }))
 
-module.exports = { addPost, getPostById, getTymByIdPost }
+     }
+}
+
+
+
+module.exports = { addPost, getPostById, getTymByIdPost, deleteById }

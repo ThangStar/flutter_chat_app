@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:seller_app/constants/constants.dart';
 
 class DetailPost extends StatelessWidget {
-  const DetailPost({super.key, required this.urlImage});
+  const DetailPost({super.key, required this.urlImage, required this.titlePost});
   final String urlImage;
+  final String titlePost;
   @override
   Widget build(BuildContext context) {
-    print("${Constants.BASE_URL}/images/$urlImage");
     return Scaffold(
       appBar: AppBar(
-        title: Text("Image detail$urlImage"),
+        title: Text(titlePost),
       ),
       body: Column(children: [
         Hero(

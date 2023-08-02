@@ -31,3 +31,20 @@ class LoadingPostFinish extends PostState {
 class TymFinish extends PostState {
   TymFinish({required super.posts});
 }
+
+class ProgressDeletePostState extends PostState {
+  const ProgressDeletePostState({required super.posts});
+}
+
+class FailureDeletePostState extends PostState{
+  const FailureDeletePostState({required super.posts});
+}
+
+class SuccessDeletePostState extends PostState{
+  const SuccessDeletePostState({required super.posts});
+
+}
+
+class FinishDeletePostState extends PostState {
+  const FinishDeletePostState({required super.posts});
+}

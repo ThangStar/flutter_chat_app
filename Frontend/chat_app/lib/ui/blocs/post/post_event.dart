@@ -37,3 +37,9 @@ class UnTymPostEvent extends PostEvent {
 
   const UnTymPostEvent({required this.index, required this.postId});
 }
+
+class DeletePostEvent extends PostEvent {
+  final int idPost;
+
+  const DeletePostEvent({required this.idPost});
+}

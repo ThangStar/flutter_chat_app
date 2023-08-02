@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/screens/detail_post.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
+import 'package:seller_app/ui/utils/role.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/utils/spacing_date_to_now.dart';
 
@@ -29,6 +32,7 @@ class PostItem extends StatefulWidget {
 class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   late final AnimationController _controllerFavorite;
   bool isFavorite = false;
+  bool isDeletting = false;
 
   @override
   void initState() {
@@ -42,6 +46,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _controllerFavorite.dispose();
+
   }
 
   @override
@@ -78,9 +83,30 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_horiz_outlined))
+                PopupMenuButton(
+                  onSelected: (value) {
+                    switch (value) {
+                      case "edit":
+                        break;
+                      case "hide":
+                        print(value);
+                        break;
+                      case "delete":
+                        context.read<PostBloc>().add(
+                            DeletePostEvent(idPost: widget.post.idPost!));
+                        break;
+                    }
+                  },
+                  icon: const Icon(Icons.more_horiz_outlined),
+                  itemBuilder: (BuildContext context) {
+                    return Role.post
+                        .map((e) => PopupMenuItem(
+                              value: e['value'],
+                              child: Text(e['label']),
+                            ))
+                        .toList();
+                  },
+                )
               ],
             ),
           ),
@@ -114,13 +140,12 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               : Container(
                   width: double.infinity,
                   height: 220,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
                       color: widget.post.styleColor == null
                           ? const Color(0xFFFFFFFF)
-                          : Color(int.parse(widget.post.styleColor!)),
-                      borderRadius: BorderRadius.circular(8)),
+                          : Color(int.parse(widget.post.styleColor!))),
                   child: Center(
                     child: Text(
                       widget.post.content,
@@ -158,8 +183,10 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          DetailPost(urlImage: url))),
+                                      builder: (context) => DetailPost(
+                                            urlImage: url,
+                                            titlePost: widget.post.title,
+                                          ))),
                               child: Hero(
                                 tag: url,
                                 child: Image.network(
@@ -268,9 +295,10 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                   clipBehavior: Clip.antiAlias,
                   children: [
                     ListView.builder(
-                      itemCount: widget.post.avatarsLiked!.split(',').length > 2
-                          ? 3
-                          : widget.post.avatarsLiked?.split(',').length,
+                      itemCount:
+                          widget.post.avatarsLiked!.split(',').length > 2
+                              ? 3
+                              : widget.post.avatarsLiked?.split(',').length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       primary: false,

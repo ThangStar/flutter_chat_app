@@ -43,7 +43,6 @@ class Api {
 
   static Future<Object> addPost(String title, String content, String idUser,
       String? styleColor, List<XFile>? imageSelected) async {
-
     //list Xfile to list multipartFile
     List<MultipartFile> images = [];
     if (imageSelected != null) {
@@ -53,7 +52,7 @@ class Api {
     }
     try {
       Response res = await Http().dio.post(ApiPath.addPost,
-      onSendProgress: (count, total) {
+          onSendProgress: (count, total) {
         print("đang tải lên: $count $total");
       },
           data: FormData.fromMap({
@@ -222,6 +221,19 @@ class Api {
       return Failure(body: response.data);
     } catch (e) {
       return Failure(message: 'error deleteOne comment');
+    }
+  }
+
+  static deletePost(int idPost) async {
+    try {
+      Response response =
+          await Http().dio.post(ApiPath.deletePost, data: {"idPost": idPost});
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      return Failure(message: 'error delete post');
     }
   }
 }

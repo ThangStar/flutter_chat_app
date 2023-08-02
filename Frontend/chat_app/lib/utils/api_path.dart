@@ -3,6 +3,7 @@ class ApiPath {
   static const messageOfUser = "/messages/messageOfUser";
   static const addPost = "/post/add";
   static const getPostByIdUser = "/post";
+  static const deletePost = "/post/delete";
 
   static const uploadAvatar = "/user/avatar";
   static const searchUserByUsername = "/user/search";

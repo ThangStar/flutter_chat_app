@@ -38,9 +38,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.build(context);
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async{ 
-
-         },
+        onRefresh: () async {},
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           primary: true,
@@ -60,17 +58,32 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               BlocListener<PostBloc, PostState>(
                 listener: (context, state) {
-                  try {
-                    if (state is LoadingPost) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                    } else if (state is LoadingPostFinish) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  } catch (err) {}
+                  switch (state.runtimeType) {
+                    case LoadingPost:
+                      {
+                        setState(() {
+                          isLoading = true;
+                        });
+                      }
+                      break;
+                    case LoadingPostFinish:
+                      {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                      break;
+                    case ProgressDeletePostState:
+                      {
+                        
+                      }
+                      break;
+                    case SuccessDeletePostState:
+                      {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text("Đã Xóa")));
+                      }
+                  }
                 },
                 child: isLoading
                     ? Column(
