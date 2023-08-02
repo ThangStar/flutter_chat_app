@@ -31,16 +31,13 @@ class AvatarAndActionButton extends StatelessWidget {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 21, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
                   child: Text(
-                    "Tạo bài đăng?", style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                      color: colorScheme(context).scrim.withOpacity(0.6)
-                  ),),
+                    "Tạo bài đăng?",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme(context).scrim.withOpacity(0.6)),
+                  ),
                 )
               ],
             ),

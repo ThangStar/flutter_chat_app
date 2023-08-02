@@ -13,5 +13,4 @@ class ApiPath {
   static const insertComment = "/comment/add";
 
   static const deleteOneComment = "/comment/deleteOne";
-
 }

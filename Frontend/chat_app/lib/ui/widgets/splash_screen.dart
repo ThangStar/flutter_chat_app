@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
-import 'package:seller_app/ui/screens/message_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../api/socket_api.dart';
-import '../../model/message.dart';
-import '../../model/profile.dart';
-import '../../storages/storage.dart';
 import '../blocs/message/message_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SPLASH SCREEN"),
+        title: const Text("SPLASH SCREEN"),
       ),
       body: Center(
         child: ElevatedButton(
@@ -43,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     builder: (context) => const LoginScreen(),
                   ));
             },
-            child: Text("ISJFIOA")),
+            child: const Text("ISJFIOA")),
       ),
     );
   }

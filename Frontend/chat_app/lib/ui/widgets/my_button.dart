@@ -21,7 +21,7 @@ class MyButton extends StatelessWidget {
         onTap: !isDisable ? onPressed : null,
         child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             child: Center(
                 child: Text(
               text ?? "Button",

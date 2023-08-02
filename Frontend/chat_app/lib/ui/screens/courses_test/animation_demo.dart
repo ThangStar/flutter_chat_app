@@ -64,9 +64,9 @@ class _AnimationDemoState extends State<AnimationDemo>
           )),
           Expanded(
               child: TweenAnimationBuilder(
-                curve: Curves.bounceOut,
+            curve: Curves.bounceOut,
             tween: Tween<double>(begin: 0, end: 1000),
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             builder: (BuildContext context, double value, Widget? child) {
               return Container(
                 width: value,

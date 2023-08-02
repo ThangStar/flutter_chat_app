@@ -11,9 +11,8 @@ class MyTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        label: Text(label ?? "label") ,
-        border: const OutlineInputBorder(borderSide: BorderSide(width: 1))
-      ),
+          label: Text(label ?? "label"),
+          border: const OutlineInputBorder(borderSide: BorderSide(width: 1))),
     );
   }
 }

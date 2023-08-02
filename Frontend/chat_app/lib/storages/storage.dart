@@ -35,7 +35,7 @@ class Storage {
     await prefs.setBool(StoragePath.isDarkTheme, value);
   }
 
-  static Future<bool> isIdOfMe(int id)async{
+  static Future<bool> isIdOfMe(int id) async {
     String prfJson = await getMyProfile() ?? "";
     Profile prf = Profile.fromRawJson(prfJson);
     print("myid: ${prf.id} param id: $id");

@@ -1,4 +1,4 @@
-class Success{
+class Success {
   final String body;
   final int statusCode;
 

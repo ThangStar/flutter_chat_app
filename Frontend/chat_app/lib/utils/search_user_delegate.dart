@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seller_app/api/api.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 
@@ -62,7 +61,7 @@ class SearchUserDelegate extends SearchDelegate {
         }
       },
       builder: (context, state) {
-        return state.profiles.length == 0
+        return state.profiles.isEmpty
             ? ListTile(
                 title: RichText(
                     text: TextSpan(

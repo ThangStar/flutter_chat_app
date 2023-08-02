@@ -14,18 +14,16 @@ class InfoItemUser extends StatelessWidget {
         Text(
           amount,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-              color: colorScheme(context).scrim
-          ),
+              fontWeight: FontWeight.bold, color: colorScheme(context).scrim),
         ),
         Text(
           title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: colorScheme(context).scrim.withOpacity(0.6)
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: colorScheme(context).scrim.withOpacity(0.6)),
         ),
       ],
     );
-    ;
   }
 }

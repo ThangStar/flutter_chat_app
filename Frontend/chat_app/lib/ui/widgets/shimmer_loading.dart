@@ -30,6 +30,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     );
   }
 }
+
 const _shimmerGradient = LinearGradient(
   colors: [
     Color(0xFFEBEBF4),

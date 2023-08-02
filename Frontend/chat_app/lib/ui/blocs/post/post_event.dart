@@ -12,9 +12,11 @@ class AddPost extends PostEvent {
   final String content;
   final String idUser;
   final String? styleColor;
+  final List<XFile>? imageSelected;
 
   const AddPost(
-      {required this.title,
+      {required this.imageSelected,
+      required this.title,
       required this.content,
       required this.idUser,
       this.styleColor});

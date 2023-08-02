@@ -5,6 +5,7 @@ const changeQuality = require('./changeQuality');
 
 const resizeImage = async (path, res, cbDel, waterMarkPath) => {
      const pathArr = path.split('.');
+     console.log(pathArr);
      const pathChanged = pathArr[0] + "resized.jpg"
      try {
           sharp(path)
@@ -21,8 +22,10 @@ const resizeImage = async (path, res, cbDel, waterMarkPath) => {
                }).toFile(pathChanged, async (err) => {
                     if (err) {
                          console.log("ERROR", err)
+                         await changeQuality(path, res, cbDel)
                     } else {
                          await changeQuality(pathChanged, res, cbDel)
+                         cbDel()
                     }
                })
 
@@ -30,11 +33,6 @@ const resizeImage = async (path, res, cbDel, waterMarkPath) => {
      } catch (error) {
           await cbDel()
           console.log("ERROR", 'its not image')
-          await fs.unlink(pathChanged, () => {
-
-          })
-     } finally {
-          cbDel()
      }
 }
 module.exports = resizeImage

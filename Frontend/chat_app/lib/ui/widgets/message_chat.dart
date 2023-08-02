@@ -30,7 +30,9 @@ class _MessageChatState extends State<MessageChat> {
     return Align(
       alignment: widget.isMyMessage ? Alignment.topRight : Alignment.topLeft,
       child: Column(
-        crossAxisAlignment: widget.isMyMessage? CrossAxisAlignment.end: CrossAxisAlignment.start,
+        crossAxisAlignment: widget.isMyMessage
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Material(
               shape: OutlineInputBorder(
@@ -62,7 +64,7 @@ class _MessageChatState extends State<MessageChat> {
                   ),
                 ),
               )),
-          SizedBox(
+          const SizedBox(
             height: 6,
           ),
           AnimatedSize(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/comment/comment_bloc.dart';
 import 'package:seller_app/ui/blocs/message/message_bloc.dart';
@@ -9,29 +8,13 @@ import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_bloc.dart';
 import 'package:seller_app/ui/blocs/search/search_bloc.dart';
-import 'package:seller_app/ui/screens/add_product_screen.dart';
-import 'package:seller_app/ui/screens/comment_screen.dart';
-import 'package:seller_app/ui/screens/courses_test/animation_demo.dart';
-import 'package:seller_app/ui/screens/courses_test/drawer_demo.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
-import 'package:seller_app/ui/screens/navigation/app_bar_nav_main.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   // check if is running on Web
-  if (kIsWeb) {
-    // initialiaze the facebook javascript SDK
-    await FacebookAuth.i.webAndDesktopInitialize(
-      appId: "1542417196196799",
-      cookie: true,
-      xfbml: true,
-      version: "v14.0",
-    );
-  }
   runApp(const MyApp());
 }
 
@@ -87,7 +70,7 @@ class _MyAppState extends State<MyApp> {
                   colorScheme: darkColorScheme,
                   textTheme: textTheme),
               themeMode: currentMode,
-              home: const AnimationDemo()),
+              home: const LoginScreen()),
         );
       },
     );

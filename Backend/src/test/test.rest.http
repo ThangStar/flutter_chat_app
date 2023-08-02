@@ -48,3 +48,19 @@ Content-Type: application/json
      "idComment": 1,
      "idPost": 50
 }
+
+###deleteOne comment
+
+POST {{urldev}}/product/add
+Content-Type: application/json
+
+{
+     "name": 1,
+     "price": 50,
+     "image": "images",
+     "amount": 5,
+     "category": "category",
+     "size": "Size",
+     "colors": "colors",
+     "isOnline": 0
+}

@@ -17,20 +17,20 @@ class LoginResponse {
     required this.profile,
   });
 
-  factory LoginResponse.fromRawJson(String str) => LoginResponse.fromJson(json.decode(str));
+  factory LoginResponse.fromRawJson(String str) =>
+      LoginResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-    status: json["status"],
-    message: json["message"],
-    profile: Profile.fromJson(json["profile"]),
-  );
+        status: json["status"],
+        message: json["message"],
+        profile: Profile.fromJson(json["profile"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "profile": profile.toJson(),
-  };
+        "status": status,
+        "message": message,
+        "profile": profile.toJson(),
+      };
 }
-

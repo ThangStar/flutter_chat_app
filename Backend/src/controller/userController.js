@@ -1,7 +1,7 @@
 const toJson = require("./../utils/ToJson");
 const conn = require("../API/mySql.api");
 const upload = require("../utils/upload");
-const { searchUserMyUsernameQuery } = require("../utils/queryCommand");
+const { searchUserMyUsernameQuery, updateAvatarQuery } = require("../utils/queryCommand");
 
 
 const getAllUser = (req, res) => {
@@ -85,23 +85,23 @@ const login = (req, res) => {
 }
 
 const uploadAvatar = (req, res) => {
-
-     if (req.files) {
-          if (req.files.filename.data.toString('hex',0,4) ==  '89504e47' || req.files.filename.data.toString('hex',0,4) == 'ffd8ffe0' || req.files.filename.data.toString('hex',0,4) == '47494638' ) {
-             
-          } else {
-              console.log('it not an image')
+     try {
+          const { idUser } = req.body
+          console.log(req.file.filename);
+          console.log(req.body);
+          if (req.file.filename && idUser) {
+               conn.query(updateAvatarQuery, [req.file.filename, idUser], (err, rs, field) => {
+                    err ? res.status(400).send(toJson({
+                         results: "error update avatar"
+                    })) : res.status(200).send(toJson({
+                         results: [{
+                              avatar: req.file.filename
+                         }]  
+                    })); console.log(rs);
+               })
           }
-     }
+     } catch (error) {
 
-     if (req.file) {
-          res.send(toJson({
-               result: 'success!'
-          }))
-     } else {
-          res.send(toJson({
-               result: 'failure!'
-          }))
      }
 }
 
@@ -111,12 +111,12 @@ const searchByUsername = (req, res) => {
      console.log('query', query);
 
      conn.query(searchUserMyUsernameQuery, [`%${query}%`], (err, rs, field) => {
-          err ? 
-          res.send(toJson({
-               "result": rs
-          })).status(400)
-          :
-          res.send(toJson(rs)).status(200)
+          err ?
+               res.send(toJson({
+                    "result": rs
+               })).status(400)
+               :
+               res.send(toJson(rs)).status(200)
      })
 }
 module.exports = { getAllUser, getUserById, addUser, login, uploadAvatar, searchByUsername }

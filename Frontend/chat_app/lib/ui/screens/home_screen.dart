@@ -35,97 +35,106 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        primary: true,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              child: AvatarAndActionButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddPostScreen(),
-                      ));
-                },
+      body: RefreshIndicator(
+        onRefresh: () async{ 
+
+         },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          primary: true,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: AvatarAndActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddPostScreen(),
+                        ));
+                  },
+                ),
               ),
-            ),
-            BlocListener<PostBloc, PostState>(
-              listener: (context, state) {
-                try {
-                  if (state is LoadingPost) {
-                    setState(() {
-                      isLoading = true;
-                    });
-                  } else if (state is LoadingPostFinish) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                  }
-                } catch (err) {}
-              },
-              child: isLoading
-                  ? Column(
-                      children: [
-                        const CircularProgressIndicator(),
-                        ShimmerLoading(
-                          isLoading: true,
-                          child: Column(
-                            children: [
-                              PostItem(
-                                post: Post(
-                                    title: "",
-                                    content: "",
-                                    dateTime: '',
-                                    username: '', fullName: ''),
-                                tymEvent: () {},
-                              ),
-                              PostItem(
-                                post: Post(
-                                    title: "",
-                                    content: "",
-                                    dateTime: '',
-                                    username: '', fullName: ''),
-                                tymEvent: () {},
-                              ),
-                            ],
+              BlocListener<PostBloc, PostState>(
+                listener: (context, state) {
+                  try {
+                    if (state is LoadingPost) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                    } else if (state is LoadingPostFinish) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  } catch (err) {}
+                },
+                child: isLoading
+                    ? Column(
+                        children: [
+                          const CircularProgressIndicator(),
+                          ShimmerLoading(
+                            isLoading: true,
+                            child: Column(
+                              children: [
+                                PostItem(
+                                  post: Post(
+                                      title: "",
+                                      content: "",
+                                      dateTime: '',
+                                      username: '',
+                                      fullName: ''),
+                                  tymEvent: () {},
+                                ),
+                                PostItem(
+                                  post: Post(
+                                      title: "",
+                                      content: "",
+                                      dateTime: '',
+                                      username: '',
+                                      fullName: ''),
+                                  tymEvent: () {},
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  : MyDivider(isPrimary: false),
-            ),
-            BlocBuilder<PostBloc, PostState>(
-              builder: (context, state) {
-                return ListView.separated(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      Post post = state.posts[index];
-                      return PostItem(
-                        commentCallback: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CommentScreen(post: post),
-                            )),
-                        post: post,
-                        tymEvent: () {
-                          context.read<PostBloc>().add(TymPostEvent(
-                              index: index, postId: post.idPost ?? 0));
-                        },
-                        unTymEvent: () => context.read<PostBloc>().add(
-                            UnTymPostEvent(
-                                index: index, postId: post.idPost ?? 0)),
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        const MyDivider(isPrimary: false),
-                    itemCount: state.posts.length);
-              },
-            )
-          ],
+                        ],
+                      )
+                    : const MyDivider(isPrimary: false),
+              ),
+              BlocBuilder<PostBloc, PostState>(
+                builder: (context, state) {
+                  return ListView.separated(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        Post post = state.posts[index];
+                        return PostItem(
+                          commentCallback: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CommentScreen(post: post),
+                              )),
+                          post: post,
+                          tymEvent: () {
+                            context.read<PostBloc>().add(TymPostEvent(
+                                index: index, postId: post.idPost ?? 0));
+                          },
+                          unTymEvent: () => context.read<PostBloc>().add(
+                              UnTymPostEvent(
+                                  index: index, postId: post.idPost ?? 0)),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const MyDivider(isPrimary: false),
+                      itemCount: state.posts.length);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

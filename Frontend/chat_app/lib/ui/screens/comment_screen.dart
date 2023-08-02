@@ -32,7 +32,6 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
 
     return SafeArea(
       child: Scaffold(
@@ -55,18 +54,17 @@ class _CommentScreenState extends State<CommentScreen> {
                       setState(() {
                         isCommentting = true;
                       });
-                    } else if (state is FinishAddComment){
+                    } else if (state is FinishAddComment) {
                       setState(() {
                         isCommentting = false;
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text("Đã bình luận"),
                           backgroundColor: Colors.green));
-                      ;
                     }
                   },
                   child:
-                      isCommentting ? LinearProgressIndicator() : Container(),
+                      isCommentting ? const LinearProgressIndicator() : Container(),
                 )),
             leading: const BackButton(),
             title: Text(

@@ -22,7 +22,7 @@ class SocketApi {
   static final SocketApi _socketApi = SocketApi._internal();
 
   // An internal private constructor to access it for only once for static instance of class.
-  SocketApi._internal(){
+  SocketApi._internal() {
     print("socket created");
     socket = IO.io(
         Constants.SOCKET_URL ?? "http://localhost:3001",

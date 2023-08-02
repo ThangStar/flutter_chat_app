@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/ui/blocs/auth/auth_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_event.dart';
+import 'package:seller_app/ui/screens/register_screen.dart';
 import 'package:seller_app/ui/widgets/my_button.dart';
 
 import '../../main.dart';
@@ -37,12 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     _authBloc = BlocProvider.of<AuthBloc>(context);
     context.read<ProfileBloc>().add(InitProfileEvent());
-
-    Storage.getIsDarkTheme().then((value) {
-      print("is Dark: $value");
-
-      MyApp.themeNotifier.value =
-          value ?? false ? ThemeMode.dark : ThemeMode.light;
+    Storage.getMyProfile().then((value) {
+      print(value);
+      setState(() {
+          if (value != null) {
+            Profile prf = Profile.fromRawJson(value);
+            controllerUsername.text = prf.username;
+            controllerPassword.text = prf.password;
+          }
+        });
     });
   }
 
@@ -58,11 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ));
       }
       if (state is LoginFailure) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Tài khoản hoặc mật khẩu không chính xác!")));
       }
     }, builder: (context, state) {
       return Scaffold(
+        appBar: AppBar(
+          title: const Text("ĐĂNG NHẬP"),
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Center(
@@ -70,26 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Wrap(runSpacing: 12, children: [
-                  const Text("ĐĂNG NHẬP"),
-                  BlocBuilder<ProfileBloc, ProfileState>(
-                    builder: (context, state) {
-                      if (state is ProfileInitial) {
-                        controllerUsername =
-                            TextEditingController(text: state.profile.username);
-                        controllerPassword =
-                            TextEditingController(text: state.profile.password);
-                      }
-                      return MyTextField(
-                        label: "tài khoản",
-                        controller: controllerUsername,
-                      );
-                    },
+                  // controllerUsername =
+                  //     TextEditingController(text: state.profile.username);
+                  // controllerPassword =
+                  //     TextEditingController(text: state.profile.password);
+                  MyTextField(
+                    label: "tài khoản",
+                    controller: controllerUsername,
                   ),
                   MyTextField(
                     label: "mật khẩu",
                     controller: controllerPassword,
                   ),
                   MyButton(
+                    text: "Đăng nhập",
                     onPressed: () async {
                       _authBloc.add(LoginAuth(
                           username: controllerUsername.text,
@@ -104,19 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () async {
-                            final LoginResult result = await FacebookAuth
-                                .instance
-                                .login(); // by default we request the email and the public profile
-                            if (result.status == LoginStatus.success) {
-                              // you are logged
-                              final AccessToken accessToken =
-                                  result.accessToken!;
-                              print(accessToken);
-                            } else {
-                              print(result.status);
-                              print(result.message);
-                            }
-                            // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterScreen(),
+                                ));
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seller_app/constants/constants.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/ui/screens/profile_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
@@ -80,8 +79,8 @@ class _UtilsScreenState extends State<UtilsScreen> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.dark_mode),
-            title: Text("Chế độ tối"),
+            leading: const Icon(Icons.dark_mode),
+            title: const Text("Chế độ tối"),
             trailing: Switch(
               value: isDark,
               onChanged: (value) {

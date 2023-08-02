@@ -25,9 +25,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         List<dynamic> usersJson = jsonDecode(result.body) as List<dynamic>;
         List<Profile> users =
             usersJson.map((e) => Profile.fromJson(e)).toList();
-        users.forEach((element) {
+        for (var element in users) {
           print("list user: ${element.username}");
-        });
+        }
         emit(SearchState(profiles: users));
       } else if (result is Failure) {
         print('error search - ${result.body}');

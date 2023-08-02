@@ -1,11 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/storages/storage.dart';
+import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/ui/widgets/my_button.dart';
+import 'package:seller_app/utils/image_picker.dart';
 
 import '../../model/profile.dart';
 import '../blocs/post/post_bloc.dart';
+
+class BoxMedia {
+  final IconData icon;
+  final String label;
+  final String subLabel;
+  final Color primaryColor;
+
+  BoxMedia(
+      {required this.icon,
+      required this.label,
+      required this.subLabel,
+      required this.primaryColor});
+}
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -34,6 +52,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   ];
   Color currentColorBg = Colors.grey.withOpacity(0.1);
   bool isChangeColor = false;
+
   TextEditingController controllerTitle = TextEditingController();
   TextEditingController controllerContent = TextEditingController();
   Profile profile = Profile(
@@ -45,6 +64,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool isPostting = false;
   final ScrollController _scrollMain = ScrollController();
 
+  List<XFile> imageSelected = [];
+  List<BoxMedia> boxMedias = [
+    BoxMedia(
+        icon: Icons.image,
+        label: "Thư viện ảnh",
+        subLabel: "Hình ảnh",
+        primaryColor: Colors.red),
+    BoxMedia(
+        icon: Icons.video_collection_sharp,
+        label: "Đa phương tiện",
+        subLabel: "Video",
+        primaryColor: Colors.green),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +85,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       Storage.getMyProfile().then((value) {
         if (value != null) {
           setState(() {
-            profile = Profile.fromRawJson(value ?? "");
+            profile = Profile.fromRawJson(value);
           });
         }
       });
@@ -99,7 +132,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     isPostting = false;
                   });
                 } else if (state is AddPostFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Đã xảy ra lỗi!"),
                       backgroundColor: Colors.red));
                   setState(() {
@@ -116,12 +149,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Avatar(
-                      url: profile.avatar),
+                  Avatar(url: profile.avatar),
                   const SizedBox(
                     width: 17,
                   ),
-                  Text(profile.fullName )
+                  Text(profile.fullName)
                 ],
               ),
             ),
@@ -130,11 +162,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
+              child: AnimatedContainer(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: currentColorBg,
                 ),
+                duration: const Duration(milliseconds: 200),
                 child: TextField(
                   controller: controllerTitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -143,7 +176,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       border: InputBorder.none,
                       hintText: "Tiêu đề",
                       hintStyle: TextStyle(
-                          color: isChangeColor ? Colors.white : Colors.black),
+                          color: isChangeColor
+                              ? Colors.white
+                              : colorScheme(context).scrim),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 21, vertical: 18)),
                 ),
@@ -154,13 +189,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
+              child: AnimatedContainer(
                 height: 220,
                 decoration: BoxDecoration(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(12)),
                   color: currentColorBg,
                 ),
+                duration: const Duration(milliseconds: 200),
                 child: TextField(
                   controller: controllerContent,
                   maxLines: null,
@@ -170,15 +206,40 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   decoration: InputDecoration(
                       hintText: "Nội dung",
                       hintStyle: TextStyle(
-                          color: isChangeColor ? Colors.white : Colors.black),
+                          color: isChangeColor
+                              ? Colors.white
+                              : colorScheme(context).scrim),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 21, vertical: 18)),
                 ),
               ),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
+            imageSelected.isNotEmpty
+                ? Container(
+                    padding: const EdgeInsets.all(16),
+                    height: 120,
+                    child: ListView.separated(
+                      itemCount: imageSelected.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        XFile image = imageSelected[index];
+                        return Container(
+                            decoration:
+                                BoxDecoration(border: Border.all(width: 1)),
+                            child: Image.file(
+                                fit: BoxFit.cover, File(image.path)));
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          width: 6,
+                        );
+                      },
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Container(
               margin: const EdgeInsets.only(left: 16),
               height: 45,
@@ -217,18 +278,26 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(left: 16),
-              height: 120,
+              height: 130,
               child: ListView.separated(
-                itemCount: 5,
+                itemCount: boxMedias.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  Color color = bigContainerColors[index];
-                  return BoxItemPost(
-                    color: color,
-                    width: 150,
-                    height: 120,
-                    radius: 10,
+                  BoxMedia boxMedia = boxMedias[index];
+                  return ItemMediaPost(
+                    onTap: () async {
+                      List<XFile>? images = await pickerMultiImage();
+                      if (images != null) {
+                        setState(() {
+                          imageSelected = images;
+                        });
+                      }
+                    },
+                    icon: boxMedia.icon,
+                    label: boxMedia.label,
+                    subLabel: boxMedia.subLabel,
+                    primaryColor: boxMedia.primaryColor,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -251,7 +320,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       styleColor: currentColorBg.value.toString(),
                       title: controllerTitle.text,
                       content: controllerContent.text,
-                      idUser: profile.id.toString()));
+                      idUser: profile.id.toString(),
+                      imageSelected: imageSelected));
                 },
               ),
             )
@@ -283,6 +353,7 @@ class BoxItemPost extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius),
       color: color,
       child: InkWell(
+        radius: radius,
         onTap: onPressed,
         child: SizedBox(
           width: width,
@@ -290,5 +361,60 @@ class BoxItemPost extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ItemMediaPost extends StatelessWidget {
+  const ItemMediaPost(
+      {super.key,
+      required this.onTap,
+      required this.icon,
+      required this.label,
+      required this.subLabel,
+      required this.primaryColor});
+
+  final Function() onTap;
+  final IconData icon;
+  final String label;
+  final String subLabel;
+  final Color primaryColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        borderRadius: BorderRadius.circular(10),
+        color: primaryColor.withOpacity(0.1),
+        child: InkWell(
+          radius: 10,
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            padding: const EdgeInsets.all(21),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Icon(
+                    icon,
+                    color: primaryColor,
+                  ),
+                ),
+                Text(
+                  subLabel,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: primaryColor.withOpacity(0.6)),
+                ),
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: primaryColor, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

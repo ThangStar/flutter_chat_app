@@ -21,25 +21,26 @@ class PersonChatted {
     required this.dateTime,
   });
 
-  factory PersonChatted.fromRawJson(String str) => PersonChatted.fromJson(json.decode(str));
+  factory PersonChatted.fromRawJson(String str) =>
+      PersonChatted.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory PersonChatted.fromJson(Map<String, dynamic> json) => PersonChatted(
-    fullName: json['full_name'],
-    avatar: json["avatar"],
-    id: json["id"],
-    username: json["username"],
-    message: json["message"],
-    dateTime: json["dateTime"],
-  );
+        fullName: json['full_name'],
+        avatar: json["avatar"],
+        id: json["id"],
+        username: json["username"],
+        message: json["message"],
+        dateTime: json["dateTime"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "avatar": avatar,
-    "id": id,
-    "username": username,
-    "message": message,
-    "dateTime": dateTime,
-    "full_name": fullName
-  };
+        "avatar": avatar,
+        "id": id,
+        "username": username,
+        "message": message,
+        "dateTime": dateTime,
+        "full_name": fullName
+      };
 }

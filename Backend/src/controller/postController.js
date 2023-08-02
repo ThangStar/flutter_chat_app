@@ -10,15 +10,14 @@ const pathCache = require("../storage/cache.storage");
 const addPost = async (req, res) => {
      const { title, content, idUser, style_color } = req.body
      console.log("POST VALUE", req.body);
-     conn.query(addAPost, [idUser, title, content, style_color], (err, rs, field) => {
+     const images = req.files.map(e => e.filename).join(',')
+     conn.query(addAPost, [idUser, title, images, content, style_color], (err, rs, field) => {
           if (err) {
-               res.status(400)
-               res.send(toJson({
-                    status: 'ERROR'
-               }))
+     res.status(400).send(toJson({
+          status: 'ERROR'
+     }))
           } else {
-               res.status(200)
-               res.send(toJson(rs))
+               res.status(200).send(toJson(rs))
           }
      })
 }
@@ -46,7 +45,6 @@ const getPostById = (req, res) => {
                          :
                          myCache.set(pathCache.PostData, toJson(rs))
                     res.status(200)
-                    console.log(rs);
                     res.send(JSON.stringify(rs))
                })
           }

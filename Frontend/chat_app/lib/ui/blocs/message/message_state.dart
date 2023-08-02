@@ -10,7 +10,7 @@ class MessageState extends Equatable {
 }
 
 class NewMessageState extends MessageState {
-  NewMessageState({required super.messages});
+  const NewMessageState({required super.messages});
 }
 
 class MessageLoadingState extends MessageState {
@@ -18,5 +18,5 @@ class MessageLoadingState extends MessageState {
 }
 
 class InitMessageFinishState extends MessageState {
-  InitMessageFinishState({required super.messages});
+  const InitMessageFinishState({required super.messages});
 }

@@ -8,5 +8,4 @@ abstract class PersonChattedEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class InitPersonChatted extends PersonChattedEvent {
-}
+class InitPersonChatted extends PersonChattedEvent {}

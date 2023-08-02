@@ -9,7 +9,7 @@ const lightColorScheme = ColorScheme(
   onPrimary: Color(0xFFFFFFFF), //text
   primaryContainer: Color(0xFFE0E0FF),
   onPrimaryContainer: Color(0xFF00006E),
-  secondary: Color(0xFF6E85E3),//button
+  secondary: Color(0xFF6E85E3), //button
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: Color(0xFFE0E0FF),
   onSecondaryContainer: Color(0xFF00006E),
@@ -34,7 +34,7 @@ const lightColorScheme = ColorScheme(
   shadow: Color(0xFF000000),
   surfaceTint: Color(0xFF3941F4),
   outlineVariant: Color(0xFFC7C5D0),
-  scrim: Color(0xFF000000),//text
+  scrim: Color(0xFF000000), //text
 );
 
 const darkColorScheme = ColorScheme(

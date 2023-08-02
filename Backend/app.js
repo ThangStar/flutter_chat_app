@@ -8,6 +8,7 @@ const postRouter = require('./src/router/post/post.router')
 const tymRouter = require('./src/router/tym/tym.router')
 const authRouter = require('./src/router/auth/auth.router')
 const commentRouter = require('./src/router/comment/comment.router')
+const productRouter = require('./src/router/product/product.router')
 
 const cors = require("cors");
 const passport = require('passport')
@@ -17,7 +18,7 @@ require('./src/utils/sendOTP').transporter
 
 app.use(
   cors({
-    origin: "http://localhost:50266",
+    origin: "http://localhost:57083",
     credentials: true,
     exposedHeaders: ["Access-Control-Allow-Origin"],
   })
@@ -39,6 +40,7 @@ var io = require('socket.io')(server);
 server.listen(PORT_SOCKET, () => {
   console.log('socket io connected ' + PORT_SOCKET);
 });
+
 var consumer = require('./src/server/socket.server');
 const session = require('express-session')
 consumer.start(io);
@@ -61,6 +63,8 @@ app.use('/post', postRouter)
 app.use('/tym', tymRouter)
 app.use('/auth', authRouter)
 app.use('/comment', commentRouter)
+
+app.use('/product', productRouter)
 
 //lab 7 trên lớp
 // app.use('/product', productRouter)

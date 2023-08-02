@@ -1,7 +1,7 @@
 module.exports = {
      messageOfUser: 'SELECT users.avatar, users.id, users.username, users.fullname as full_name, messages.message, messages.dateTime ' +
           'FROM users JOIN messages on messages.idUserSend = users.id OR messages.idUserGet = users.id  WHERE messages.idUserSend = ? OR messages.idUserGet = ? GROUP by users.id',
-     addAPost: 'INSERT INTO posts(idUser, title, content, style_color) VALUES (?,?,?,?)',
+     addAPost: 'INSERT INTO posts(idUser, title, images, content, style_color) VALUES (?,?,?,?,?)',
      getAllPost: `
      SELECT COUNT(detail_tym.idUser) as "total_tym",
      (
@@ -12,6 +12,7 @@ module.exports = {
      users.id,
      users.avatar,
      posts.title,
+     posts.images,
      posts.content,
      posts.dateTime,
      posts.style_color,
@@ -50,6 +51,7 @@ module.exports = {
      (idUser, idPost, content) 
      VALUES (?, ?, ?)`,
      deleteCommentQuery: 'DELETE FROM `comments` WHERE id = ?',
+     updateAvatarQuery: `UPDATE users SET avatar = ? WHERE users.id = ?`
 
 }
 

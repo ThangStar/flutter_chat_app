@@ -9,3 +9,8 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class InitProfileEvent extends ProfileEvent {}
+class UpdateAvatarProfileEvent extends ProfileEvent{
+  final String avatarUrl;
+
+  const UpdateAvatarProfileEvent({required this.avatarUrl});
+}

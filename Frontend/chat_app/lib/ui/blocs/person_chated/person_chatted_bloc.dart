@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:seller_app/api/api.dart';
-import 'package:seller_app/model/message.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/response.dart';
@@ -17,7 +16,7 @@ part 'person_chatted_event.dart';
 part 'person_chatted_state.dart';
 
 class PersonChattedBloc extends Bloc<PersonChattedEvent, PersonChattedState> {
-  PersonChattedBloc() : super(PersonChattedState(persons: [])) {
+  PersonChattedBloc() : super(const PersonChattedState(persons: [])) {
     on<InitPersonChatted>(_initPersonChatted);
   }
 

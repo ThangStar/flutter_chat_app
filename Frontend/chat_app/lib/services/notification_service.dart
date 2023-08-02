@@ -4,11 +4,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationService {
   NotificationService();
 
-  static showNoti(int id,
-      FlutterLocalNotificationsPlugin fln,
-      Function(String) callBackEmitMessage,
-      Map<String, dynamic> icerik) async {
-
+  static showNoti(int id, FlutterLocalNotificationsPlugin fln,
+      Function(String) callBackEmitMessage, Map<String, dynamic> icerik) async {
     String longdata = icerik["notification"]["body"];
 
     var bigTextStyleInformation = BigTextStyleInformation(longdata);
@@ -16,23 +13,26 @@ class NotificationService {
     var androidInit = const AndroidInitializationSettings("mipmap/ic_launcher");
     var darwinInitialization = const DarwinInitializationSettings();
     var initSetting =
-    InitializationSettings(android: androidInit, iOS: darwinInitialization);
-    fln.initialize(initSetting,
-        onDidReceiveNotificationResponse: (details) {
-          onDidReceiveNotificationResponse(details, callBackEmitMessage);
-        },);
+        InitializationSettings(android: androidInit, iOS: darwinInitialization);
+    fln.initialize(
+      initSetting,
+      onDidReceiveNotificationResponse: (details) {
+        onDidReceiveNotificationResponse(details, callBackEmitMessage);
+      },
+    );
 
     AndroidNotificationDetails androidNotificationDetails =
-     AndroidNotificationDetails(
+        AndroidNotificationDetails(
       "CHANNEL_ID",
       "CHANEL NAME",
       importance: Importance.high,
       playSound: true,
-      sound: const UriAndroidNotificationSound('assets/raw/notification_sound.mp3'),
+      sound: const UriAndroidNotificationSound(
+          'assets/raw/notification_sound.mp3'),
       styleInformation: bigTextStyleInformation,
       priority: Priority.high,
       actions: [
-        AndroidNotificationAction("ID_MESSAGE", "Trả lời",
+        const AndroidNotificationAction("ID_MESSAGE", "Trả lời",
             cancelNotification: true,
             inputs: [AndroidNotificationActionInput(label: "Nhập tin nhắn..")],
             showsUserInterface: true,
@@ -41,16 +41,16 @@ class NotificationService {
       ],
     );
     DarwinNotificationDetails darwinNotificationDetails =
-    const DarwinNotificationDetails(badgeNumber: 1);
+        const DarwinNotificationDetails(badgeNumber: 1);
     var noti = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
-    await fln.show(id,  icerik["notification"]["title"],
-        icerik["notification"]["body"],  noti);
+    await fln.show(id, icerik["notification"]["title"],
+        icerik["notification"]["body"], noti);
   }
 }
 
-void onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse, Function(String) callBackEmitMessage) async {
+void onDidReceiveNotificationResponse(NotificationResponse notificationResponse,
+    Function(String) callBackEmitMessage) async {
   final String? payload = notificationResponse.payload;
   if (notificationResponse.payload != null) {
     debugPrint('notification payload: ${payload.toString()}');
@@ -64,4 +64,3 @@ void onDidReceiveNotificationResponse(
     }
   }
 }
-

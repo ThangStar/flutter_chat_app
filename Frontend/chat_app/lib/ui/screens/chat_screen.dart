@@ -43,24 +43,24 @@ class _ChatScreenState extends State<ChatScreen> {
     Storage.getMyProfile().then((value) {
       Profile profile = Profile.fromRawJson(value ?? "");
 
-      IO.Socket _socket = SocketApi(profile.id).socket;
-      _socket.emit("requestMessagesFromClient", {
+      IO.Socket socket = SocketApi(profile.id).socket;
+      socket.emit("requestMessagesFromClient", {
         "idUserSend": profile.id,
         "idUserGet": widget.idUserChatting,
       });
 
-      if (!_socket.hasListeners("messages")) {
-        _socket.on("messages", (data) async {
+      if (!socket.hasListeners("messages")) {
+        socket.on("messages", (data) async {
           print(data.runtimeType);
           // final listDynamic = jsonDecode(res.body) as List<dynamic>;
           // final posts = listDynamic.map((e) => Post.fromJson(e)).toList();
           final messagesJson = data as List<dynamic>;
           List<Message> messages = [];
 
-          messagesJson.forEach((e) {
+          for (var e in messagesJson) {
             print(Message.fromJson(e).dateTime);
             messages.add(Message.fromJson(e));
-          });
+          }
           messageBloc.add(InitDataMessagesEvent(messages: messages));
         });
       }
@@ -81,49 +81,48 @@ class _ChatScreenState extends State<ChatScreen> {
           toolbarHeight: 100,
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(backgroundImage: NetworkImage(widget.avatarUrl)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.fullNameUserChatting,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                                fontWeight: FontWeight.bold, fontSize: 22),
-                      ),
-                      Row(
-                        children: [
-                          OnlineIcon(),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Đang hoạt động',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w100,
-                                    color: colorScheme(context)
-                                        .scrim
-                                        .withOpacity(0.6)),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const BackButton(),
+              CircleAvatar(backgroundImage: NetworkImage(widget.avatarUrl)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.fullNameUserChatting,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    Row(
+                      children: [
+                        const OnlineIcon(),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          'Đang hoạt động',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                fontSize: 14,
+                                  fontWeight: FontWeight.w100,
+                                  color: colorScheme(context)
+                                      .scrim
+                                      .withOpacity(0.6)),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           actions: [
             MyActionButton(
@@ -142,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 22,
             ),
             Flexible(
@@ -173,7 +172,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               isMyMessage:
                                   message.idUserSend != widget.idUserChatting);
                         },
-                        separatorBuilder: (context, index) => SizedBox(
+                        separatorBuilder: (context, index) => const SizedBox(
                               height: 12,
                             ),
                         itemCount: state.messages.length);

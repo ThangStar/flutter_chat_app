@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -7,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/api/api.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
-import 'package:seller_app/utils/spacing_date_to_now.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../api/socket_api.dart';
@@ -43,9 +41,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       emit(NewMessageState(messages: state.messages));
 
       //
-      IO.Socket _socket = SocketApi(profile.id).socket;
-      if (_socket.connected) {
-        _socket.emit("messageFromClient", {
+      IO.Socket socket = SocketApi(profile.id).socket;
+      if (socket.connected) {
+        socket.emit("messageFromClient", {
           'message': event.txtMessage,
           'idUserGet': event.idUserChatting,
           'idUserSend': profile.id,

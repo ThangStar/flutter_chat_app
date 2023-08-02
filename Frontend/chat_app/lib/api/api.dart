@@ -22,7 +22,7 @@ class Api {
           body: res.data,
           statusCode: res.statusCode ?? 404);
     } catch (err) {
-      print('error ${err}');
+      print('error $err');
       return Failure(message: err.toString());
     }
   }
@@ -41,15 +41,28 @@ class Api {
     }
   }
 
-  static Future<Object> addPost(
-      String title, String content, String idUser, String? styleColor) async {
+  static Future<Object> addPost(String title, String content, String idUser,
+      String? styleColor, List<XFile>? imageSelected) async {
+
+    //list Xfile to list multipartFile
+    List<MultipartFile> images = [];
+    if (imageSelected != null) {
+      for (XFile image in imageSelected) {
+        images.add(await MultipartFile.fromFile(image.path));
+      }
+    }
     try {
-      Response res = await Http().dio.post(ApiPath.addPost, data: {
-        'title': title,
-        'content': content,
-        'idUser': idUser,
-        'style_color': styleColor
-      });
+      Response res = await Http().dio.post(ApiPath.addPost,
+      onSendProgress: (count, total) {
+        print("đang tải lên: $count $total");
+      },
+          data: FormData.fromMap({
+            'title': title,
+            'content': content,
+            'idUser': idUser,
+            'style_color': styleColor,
+            'images': images
+          }));
       if (res.statusCode == 200) {
         return Success(body: res.data);
       }
@@ -81,11 +94,14 @@ class Api {
   }
 
   static uploadAvatar(String path) async {
+    String? jsonProfile = await Storage.getMyProfile();
+    Profile profile = Profile.fromRawJson(jsonProfile ?? "null");
+
     String fileName = path.split('/').last;
-    print(fileName);
     try {
       final formData = FormData.fromMap({
         'avatar': await MultipartFile.fromFile(path, filename: fileName),
+        "idUser": profile.id
       });
 
       Response res = await Http().dio.post(
@@ -164,7 +180,7 @@ class Api {
       Profile profile = Profile.fromRawJson(jsonProfile ?? "");
 
       Response response = await Http().dio.get(ApiPath.getCommentByIdPost,
-          queryParameters: {"idPost": profile.id, "idPost": idPost});
+          queryParameters: {"idUser": profile.id, "idPost": idPost});
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }
@@ -195,7 +211,11 @@ class Api {
       Profile profile = Profile.fromRawJson(jsonProfile ?? "");
 
       Response response = await Http().dio.post(ApiPath.deleteOneComment,
-          data: {"idUser": profile.id, "idPost": idPost, "idComment": idComment});
+          data: {
+            "idUser": profile.id,
+            "idPost": idPost,
+            "idComment": idComment
+          });
       if (response.statusCode == 200) {
         return Success(body: response.data);
       }

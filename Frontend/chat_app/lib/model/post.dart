@@ -18,9 +18,11 @@ class Post {
   String? avatar;
   String? avatarsLiked;
   String fullName;
+  String? images;
 
   Post(
-      {this.avatar,
+      {this.images,
+      this.avatar,
       required this.fullName,
       this.avatarsLiked,
       this.totalComment,
@@ -39,6 +41,7 @@ class Post {
   String toRawJson() => json.encode(toJson());
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
+      images: json['images'],
       avatar: json['avatar'],
       avatarsLiked: json['avatar_liked'],
       totalComment: json['total_comment'],
@@ -54,6 +57,7 @@ class Post {
       fullName: json['full_name']);
 
   Map<String, dynamic> toJson() => {
+        "images": images,
         "avatar": avatar,
         "avatar_liked": avatarsLiked,
         "total_tym": totalTym,

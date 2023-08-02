@@ -8,25 +8,34 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("ĐĂNG KÍ"),
+      ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Wrap(runSpacing: 12, children: [
-                Text("ĐĂNG KÍ"),
-                MyTextField(label: "tài khoản", controller: TextEditingController(),),
+                const Text("ĐĂNG KÍ"),
                 MyTextField(
+                  label: "tài khoản",
                   controller: TextEditingController(),
-                  label: "nhập lại mật khẩu",
                 ),
                 MyTextField(
                   controller: TextEditingController(),
                   label: "mật khẩu",
                 ),
-                MyButton(onPressed: () {  },)
+                MyTextField(
+                  controller: TextEditingController(),
+                  label: "nhập lại mật khẩu",
+                ),
+                MyButton(
+                  text: "Đăng kí",
+                  onPressed: () {},
+                )
               ]),
             ],
           ),

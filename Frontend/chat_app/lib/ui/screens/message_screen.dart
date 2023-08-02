@@ -1,23 +1,17 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:seller_app/model/person_chatted.dart';
-import 'package:seller_app/services/notification_service.dart';
 import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/screens/chat_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
 import 'package:seller_app/ui/widgets/my_action_button.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../api/socket_api.dart';
 import '../../constants/constants.dart';
-import '../../model/message.dart' as MS;
 import '../../model/profile.dart';
 import '../../storages/storage.dart';
-import '../blocs/message/message_bloc.dart';
 import '../widgets/avatar_message.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -30,7 +24,8 @@ class MessageScreen extends StatefulWidget {
 class _ChatScreenState extends State<MessageScreen> {
   late PersonChattedBloc _chattedBloc;
   String fullName = "";
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   @override
   void initState() {
     super.initState();
@@ -69,7 +64,7 @@ class _ChatScreenState extends State<MessageScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorScheme(context).secondary,
-        onPressed: ()async{
+        onPressed: () async {
           // await NotificationService.showNoti(1, "title", "body", flutterLocalNotificationsPlugin);
         },
         child: Icon(color: colorScheme(context).onPrimary, Icons.add),
@@ -77,11 +72,12 @@ class _ChatScreenState extends State<MessageScreen> {
       appBar: AppBar(
         backgroundColor: colorScheme(context).background,
         toolbarHeight: 100,
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Chào ${fullName},",
+              "Chào $fullName,",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: colorScheme(context).scrim.withOpacity(0.6)),
             ),
@@ -95,7 +91,7 @@ class _ChatScreenState extends State<MessageScreen> {
         actions: [
           MyActionButton(
             onPressed: () {},
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
           )
         ],
       ),
@@ -187,7 +183,6 @@ class _ChatContentState extends State<ChatContent> {
         },
       ),
     );
-    ;
   }
 }
 

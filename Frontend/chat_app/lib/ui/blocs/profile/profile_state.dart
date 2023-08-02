@@ -8,6 +8,10 @@ class ProfileState extends Equatable {
   List<Object?> get props => [profile];
 }
 
-class ProfileInitial extends ProfileState {
-  const ProfileInitial({required super.profile});
+class ProgressUpdateAvatarProfileState extends ProfileState {
+  const ProgressUpdateAvatarProfileState({required super.profile});
+}
+
+class FinishUpdateAvatarProfileState extends ProfileState {
+  const FinishUpdateAvatarProfileState({required super.profile});
 }

@@ -45,7 +45,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       HandleAddCommentEvent event, Emitter<CommentState> emit) async {
     try {
       emit(ProgressAddComment(comments: state.comments));
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       String? jsonProfile = await Storage.getMyProfile();
 
       Profile profile = Profile.fromRawJson(jsonProfile ?? "null");
@@ -58,7 +58,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
             jsonComments.map((e) => Comment.fromJson(e)).toList();
         emit(CommentState(comments: comments));
       } else if (response is Failure) {
-        print("${response.message}");
+        print(response.message);
         print(
           'failure',
         );
@@ -75,7 +75,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     try {
       emit(ProgressDeleteOneComment(comments: state.comments));
 
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       Object response =
           await Api.deleteOneComment(event.idPost, event.idComment);
       if (response is Success) {
@@ -86,7 +86,6 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       } else if (response is Failure) {
         print("failure ${response.message}");
       }
-    } catch (err) {
     } finally {
       emit(FinishDeleteOneComment(comments: state.comments));
     }

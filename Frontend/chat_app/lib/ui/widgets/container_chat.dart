@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
-import 'package:seller_app/utils/image_picker.dart';
 
 class ContainerChat extends StatefulWidget {
   const ContainerChat(

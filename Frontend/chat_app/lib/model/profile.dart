@@ -24,19 +24,18 @@ class Profile {
   String toRawJson() => json.encode(toJson());
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-    id: json["id"],
-    fullName: json['full_name'],
-    username: json["username"],
-    password: json["password"],
-    avatar: json["avatar"],
-  );
+        id: json["id"],
+        fullName: json['full_name'],
+        username: json["username"],
+        password: json["password"],
+        avatar: json["avatar"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "username": username,
-    "password": password,
-    "avatar": avatar,
-    "full_name": fullName
-  };
-
+        "id": id,
+        "username": username,
+        "password": password,
+        "avatar": avatar,
+        "full_name": fullName
+      };
 }

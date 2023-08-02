@@ -1,5 +1,4 @@
-class Person{
-
+class Person {
   final String name;
   final int age;
   final double height;
@@ -25,11 +24,7 @@ class Person{
 
   @override
   String toString() {
-    return 'Person{' +
-        ' name: $name,' +
-        ' age: $age,' +
-        ' height: $height,' +
-        '}';
+    return 'Person{ name: $name, age: $age, height: $height,}';
   }
 
   Person copyWith({
@@ -46,9 +41,9 @@ class Person{
 
   Map<String, dynamic> toJson() {
     return {
-      'name': this.name,
-      'age': this.age,
-      'height': this.height,
+      'name': name,
+      'age': age,
+      'height': height,
     };
   }
 

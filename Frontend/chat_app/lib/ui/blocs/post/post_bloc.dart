@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/api/api.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
@@ -26,10 +27,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     emit(AddPostting(posts: state.posts));
     await Future.delayed(const Duration(seconds: 3));
 
-    print('color add post: ${event.styleColor}');
     try {
       Object res = await Api.addPost(
-          event.title, event.content, event.idUser, event.styleColor);
+          event.title, event.content, event.idUser, event.styleColor, event.imageSelected);
       if (res is Success) {
         emit(AddPostSucces(posts: state.posts));
       } else if (res is Failure) {

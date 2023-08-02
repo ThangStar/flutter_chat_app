@@ -10,7 +10,6 @@ import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/response.dart';
 
 import '../../../api/api.dart';
-import '../profile/profile_event.dart';
 
 part 'auth_event.dart';
 

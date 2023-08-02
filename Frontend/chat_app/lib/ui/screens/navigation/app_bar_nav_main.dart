@@ -4,7 +4,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:seller_app/main.dart';
 import 'package:seller_app/ui/screens/home_screen.dart';
-import 'package:seller_app/ui/screens/profile_screen.dart';
 import 'package:seller_app/ui/screens/utils_screen.dart';
 import 'package:seller_app/utils/search_user_delegate.dart';
 import '../../../services/notification_service.dart';
@@ -14,10 +13,8 @@ import '../../../api/socket_api.dart';
 import '../../../model/profile.dart';
 import '../../../storages/storage.dart';
 import '../../blocs/message/message_bloc.dart';
-import '../../blocs/person_chated/person_chatted_bloc.dart';
 import '../../theme/color_schemes.dart';
 import '../message_screen.dart';
-import 'package:seller_app/ui/widgets/my_action_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class AppBarNavMain extends StatefulWidget {
