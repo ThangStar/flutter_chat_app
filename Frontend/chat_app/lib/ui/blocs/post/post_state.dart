@@ -36,15 +36,34 @@ class ProgressDeletePostState extends PostState {
   const ProgressDeletePostState({required super.posts});
 }
 
-class FailureDeletePostState extends PostState{
+class FailureDeletePostState extends PostState {
   const FailureDeletePostState({required super.posts});
 }
 
-class SuccessDeletePostState extends PostState{
+class SuccessDeletePostState extends PostState {
   const SuccessDeletePostState({required super.posts});
-
 }
 
 class FinishDeletePostState extends PostState {
   const FinishDeletePostState({required super.posts});
+}
+
+class HidePostState extends PostState {
+  const HidePostState({required super.posts});
+}
+
+class FinishHidePostState extends PostState {
+  const FinishHidePostState({required super.posts});
+}
+
+class ProgressUpdatePostState extends PostState {
+  const ProgressUpdatePostState({required super.posts});
+}
+
+class SuccessUpdatePostState extends PostState {
+  const SuccessUpdatePostState({required super.posts});
+}
+
+class FailureUpdatePostState extends PostState {
+  const FailureUpdatePostState({required super.posts});
 }

@@ -22,6 +22,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<TymPostEvent>(_tymPostEvent);
     on<UnTymPostEvent>(_unTymPostEvent);
     on<DeletePostEvent>(_deletePostEvent);
+    on<HidePostEvent>(_hidePostEvent);
+    on<UpdatePostEvent>(_updatePostEvent);
   }
 
   FutureOr<void> _addPost(AddPost event, Emitter<PostState> emit) async {
@@ -30,7 +32,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     try {
       Object res = await Api.addPost(event.title, event.content, event.idUser,
-          event.styleColor, event.imageSelected);
+          event.styleColor, event.imageSelected, event.onChangeProgress);
       if (res is Success) {
         emit(AddPostSucces(posts: state.posts));
       } else if (res is Failure) {
@@ -114,13 +116,15 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   FutureOr<void> _deletePostEvent(
       DeletePostEvent event, Emitter<PostState> emit) async {
-        print("event.idPost ${event.idPost}");
+    print("event.idPost ${event.idPost}");
     emit(ProgressDeletePostState(posts: state.posts));
     await Future.delayed(const Duration(seconds: 1));
     try {
       Object response = await Api.deletePost(event.idPost);
       if (response is Success) {
-        emit(SuccessDeletePostState(posts: state.posts..removeWhere((element) => element.idPost == event.idPost)));
+        emit(SuccessDeletePostState(
+            posts: state.posts
+              ..removeWhere((element) => element.idPost == event.idPost)));
       } else if (response is Failure) {
         print("FAILURE");
         emit(FailureDeletePostState(posts: state.posts));
@@ -129,6 +133,32 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(FailureDeletePostState(posts: state.posts));
     } finally {
       emit(FinishDeletePostState(posts: state.posts));
+    }
+  }
+
+  FutureOr<void> _hidePostEvent(HidePostEvent event, Emitter<PostState> emit) {
+    emit(HidePostState(
+        posts: state.posts
+          ..removeWhere((element) => element.idPost == event.idPost)));
+    emit(FinishHidePostState(posts: state.posts));
+  }
+
+  FutureOr<void> _updatePostEvent(
+      UpdatePostEvent event, Emitter<PostState> emit) async {
+    print("updatting");
+    emit(ProgressUpdatePostState(posts: state.posts));
+    try {
+      Object response = await Api.updatePost(event.post);
+      if (response is Success) {
+        int index = state.posts.indexWhere((element) => element.idPost == event.post.idPost);
+        state.posts[index] = event.post;
+        emit(SuccessUpdatePostState(posts: [...state.posts]));
+      } else if (response is Failure) {
+        emit(FailureUpdatePostState(posts: state.posts));
+      }
+    } catch (e) {
+      emit(FailureUpdatePostState(posts: state.posts));
+      print("ERROR $e");
     }
   }
 }

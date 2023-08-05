@@ -1,5 +1,5 @@
 class Success {
-  final String body;
+  final dynamic body;
   final int statusCode;
 
   Success({required this.body, this.statusCode = 200});

@@ -78,6 +78,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
         primaryColor: Colors.green),
   ];
 
+  double valueProgress = 0;
+
   @override
   void initState() {
     super.initState();
@@ -140,7 +142,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   });
                 }
               },
-              child: isPostting ? const LinearProgressIndicator() : Container(),
+              child: isPostting
+                  ? LinearProgressIndicator(
+                      value: valueProgress, //1 is max 100%
+                    )
+                  : Container(),
             ),
             const SizedBox(
               height: 21,
@@ -278,7 +284,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(left: 16),
-              height: 130,
+              height: 160,
               child: ListView.separated(
                 itemCount: boxMedias.length,
                 scrollDirection: Axis.horizontal,
@@ -321,7 +327,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       title: controllerTitle.text,
                       content: controllerContent.text,
                       idUser: profile.id.toString(),
-                      imageSelected: imageSelected));
+                      imageSelected: imageSelected,
+                      onChangeProgress: (double value) {
+                        print("uploading ${value*100}%");
+                        setState(() {
+                          valueProgress = value;
+                        });
+                      }));
                 },
               ),
             )

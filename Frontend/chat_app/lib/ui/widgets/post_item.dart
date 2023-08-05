@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/screens/detail_post.dart';
+import 'package:seller_app/ui/screens/update_post_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/utils/role.dart';
 import 'package:seller_app/ui/widgets/avatar.dart';
@@ -33,6 +36,8 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   late final AnimationController _controllerFavorite;
   bool isFavorite = false;
   bool isDeletting = false;
+  bool isHide = false;
+  String url = "";
 
   @override
   void initState() {
@@ -46,7 +51,6 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _controllerFavorite.dispose();
-
   }
 
   @override
@@ -87,13 +91,28 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                   onSelected: (value) {
                     switch (value) {
                       case "edit":
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  UpdatePostScreen(post: widget.post, onChangeImage: (p0) {
+                                    setState(() {
+                                      url = p0;
+                                    });
+                                    print(url.contains("\\"));
+                                    print(p0);
+                                  },),
+                            ));
                         break;
                       case "hide":
-                        print(value);
+                        context
+                            .read<PostBloc>()
+                            .add(HidePostEvent(idPost: widget.post.idPost!));
                         break;
                       case "delete":
-                        context.read<PostBloc>().add(
-                            DeletePostEvent(idPost: widget.post.idPost!));
+                        context
+                            .read<PostBloc>()
+                            .add(DeletePostEvent(idPost: widget.post.idPost!));
                         break;
                     }
                   },
@@ -140,8 +159,8 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
               : Container(
                   width: double.infinity,
                   height: 220,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
                       color: widget.post.styleColor == null
                           ? const Color(0xFFFFFFFF)
@@ -159,7 +178,9 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
           const SizedBox(
             height: 18,
           ),
-          widget.post.images != "" && widget.post.images != null
+          widget.post.images != "" &&
+                  widget.post.images != "0" &&
+                  widget.post.images != null
               ? GridView.builder(
                   shrinkWrap: true,
                   primary: false,
@@ -167,7 +188,7 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                       ? 4
                       : widget.post.images!.split(",").length,
                   itemBuilder: (BuildContext context, int index) {
-                    String url = widget.post.images!.split(",")[index];
+                    url = widget.post.images!.split(',')[index];
                     return Stack(
                         fit: StackFit.expand,
                         alignment: Alignment.center,
@@ -188,11 +209,19 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                                             titlePost: widget.post.title,
                                           ))),
                               child: Hero(
-                                tag: url,
-                                child: Image.network(
-                                    fit: BoxFit.cover,
-                                    "${Constants.BASE_URL}/images/$url"),
-                              ),
+                                  tag: url,
+                                  child: url.contains("\\")
+                                      ? Image.file(
+                                          File(url),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : FadeInImage.assetNetwork(
+                                          fit: BoxFit.cover,
+                                          placeholder:
+                                              'assets/images/loading.jpg',
+                                          image:
+                                              "${Constants.BASE_URL}/images/$url",
+                                        )),
                             ),
                           )),
                           widget.post.images!.split(",").length > 4 &&
@@ -295,10 +324,9 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                   clipBehavior: Clip.antiAlias,
                   children: [
                     ListView.builder(
-                      itemCount:
-                          widget.post.avatarsLiked!.split(',').length > 2
-                              ? 3
-                              : widget.post.avatarsLiked?.split(',').length,
+                      itemCount: widget.post.avatarsLiked!.split(',').length > 2
+                          ? 3
+                          : widget.post.avatarsLiked?.split(',').length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       primary: false,

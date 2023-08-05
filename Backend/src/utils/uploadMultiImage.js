@@ -49,9 +49,9 @@ const uploadMultiImage = async function (req, res, next) {
                return res.end("Error uploading file." + err);
           }
           try {
-               var dimensions = sizeOf('./src/public/images/' + req.files[0].filename);
-               const filePath = path.join(__dirname, "../public/images", req.files[0].filename);
-               var waterMarkPath = path.join(__dirname, "../public/images/water_mark.png");
+               // var dimensions = sizeOf('./src/public/images/' + req.files[0].filename);
+               // const filePath = path.join(__dirname, "../public/images", req.files[0].filename);
+               // var waterMarkPath = path.join(__dirname, "../public/images/water_mark.png");
 
                // if (dimensions.width < 50) {
                //      try {

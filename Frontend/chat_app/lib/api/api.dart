@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seller_app/api/socket_api.dart';
+import 'package:seller_app/model/post.dart';
 import 'package:seller_app/model/profile.dart';
 import 'package:seller_app/storages/storage.dart';
 import 'package:seller_app/utils/api_path.dart';
@@ -41,8 +42,13 @@ class Api {
     }
   }
 
-  static Future<Object> addPost(String title, String content, String idUser,
-      String? styleColor, List<XFile>? imageSelected) async {
+  static Future<Object> addPost(
+      String title,
+      String content,
+      String idUser,
+      String? styleColor,
+      List<XFile>? imageSelected,
+      Function(double value) onChangeProgress) async {
     //list Xfile to list multipartFile
     List<MultipartFile> images = [];
     if (imageSelected != null) {
@@ -53,7 +59,7 @@ class Api {
     try {
       Response res = await Http().dio.post(ApiPath.addPost,
           onSendProgress: (count, total) {
-        print("đang tải lên: $count $total");
+        onChangeProgress(count / total);
       },
           data: FormData.fromMap({
             'title': title,
@@ -234,6 +240,44 @@ class Api {
       return Failure(body: response.data);
     } catch (e) {
       return Failure(message: 'error delete post');
+    }
+  }
+
+  static Future<Object> updatePost(Post post) async {
+    String? jsonPrf = await Storage.getMyProfile();
+    Profile prf = Profile.fromRawJson(jsonPrf ?? "");
+
+    try {
+      List<MultipartFile> formDataImages = [];
+      List<String> uriImage = [];
+      print(post.images);
+      if(post.images != null && post.images != ""){
+        uriImage = post.images!.split(",");
+      }
+
+      for (String image in uriImage) {
+        formDataImages.add(await MultipartFile.fromFile(image));
+      }
+
+      print(formDataImages.length);
+      Response response = await Http().dio.post(ApiPath.updatePost,
+          data: FormData.fromMap({
+            "idUser": prf.id,
+            "title": post.title,
+            "images": formDataImages,
+            "content": "post.content",
+            "style_color": post.styleColor,
+            "idPost": post.idPost!
+          }));
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        return Success(body: response.data);
+      }
+      return Failure(body: response.data);
+    } catch (e) {
+      print("ERROR: $e");
+      return Failure(message: 'error updatePost');
     }
   }
 }

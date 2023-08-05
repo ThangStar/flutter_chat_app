@@ -74,9 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
                       }
                       break;
                     case ProgressDeletePostState:
-                      {
-                        
-                      }
+                      {}
                       break;
                     case SuccessDeletePostState:
                       {

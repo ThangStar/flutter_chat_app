@@ -52,7 +52,11 @@ module.exports = {
      VALUES (?, ?, ?)`,
      deleteCommentQuery: 'DELETE FROM `comments` WHERE id = ?',
      updateAvatarQuery: `UPDATE users SET avatar = ? WHERE users.id = ?`,
-     detelePostByIdQuery: "DELETE FROM posts WHERE id = ?"
+     detelePostByIdQuery: "DELETE FROM posts WHERE id = ?",
+     updatePost: `
+     UPDATE POSTS SET title = ?,
+     images = ?, content = ?,
+     style_color = ? WHERE id = ?`
 
 }
 

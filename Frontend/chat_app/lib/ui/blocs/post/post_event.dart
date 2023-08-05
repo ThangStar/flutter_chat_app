@@ -13,9 +13,11 @@ class AddPost extends PostEvent {
   final String idUser;
   final String? styleColor;
   final List<XFile>? imageSelected;
+  final Function(double value) onChangeProgress;
 
   const AddPost(
-      {required this.imageSelected,
+      {required this.onChangeProgress,
+      required this.imageSelected,
       required this.title,
       required this.content,
       required this.idUser,
@@ -42,4 +44,16 @@ class DeletePostEvent extends PostEvent {
   final int idPost;
 
   const DeletePostEvent({required this.idPost});
+}
+
+class HidePostEvent extends PostEvent {
+  final int idPost;
+
+  const HidePostEvent({required this.idPost});
+}
+
+class UpdatePostEvent extends PostEvent {
+  final Post post;
+  final Function(double value) onChangeProgress;
+  const UpdatePostEvent({required this.onChangeProgress, required this.post});
 }
