@@ -94,14 +94,16 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdatePostScreen(post: widget.post, onChangeImage: (p0) {
-                                    setState(() {
-                                      url = p0;
-                                    });
-                                    print(url.contains("\\"));
-                                    print(p0);
-                                  },),
+                              builder: (context) => UpdatePostScreen(
+                                post: widget.post,
+                                onChangeImage: (p0) {
+                                  setState(() {
+                                    url = p0;
+                                  });
+                                  print(url.contains("\\"));
+                                  print(p0);
+                                },
+                              ),
                             ));
                         break;
                       case "hide":
@@ -210,18 +212,11 @@ class _PostItemState extends State<PostItem> with TickerProviderStateMixin {
                                           ))),
                               child: Hero(
                                   tag: url,
-                                  child: url.contains("\\")
-                                      ? Image.file(
-                                          File(url),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : FadeInImage.assetNetwork(
-                                          fit: BoxFit.cover,
-                                          placeholder:
-                                              'assets/images/loading.jpg',
-                                          image:
-                                              "${Constants.BASE_URL}/images/$url",
-                                        )),
+                                  child: FadeInImage.assetNetwork(
+                                    fit: BoxFit.cover,
+                                    placeholder: 'assets/images/loading.jpg',
+                                    image: "${Constants.BASE_URL}/images/$url",
+                                  )),
                             ),
                           )),
                           widget.post.images!.split(",").length > 4 &&

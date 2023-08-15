@@ -7,7 +7,7 @@ var transporter = nodemailer.createTransport({
 	auth: {
 		user: process.env.EMAIL_SEND_OTP,			//email ID
 		pass: process.env.PASSWORD_SEND_OTP,				//Password 
-	}
+	},
 });
 
 function sendOTP(to, otp) {

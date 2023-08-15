@@ -18,7 +18,7 @@ class DetailPost extends StatelessWidget {
         Hero(
             tag: '$urlImage',
             child: Expanded(
-                child: urlImage.contains('\\')
+                child: !urlImage.contains('\\')
                     ? Image.network(
                         fit: BoxFit.cover,
                         width: double.infinity,

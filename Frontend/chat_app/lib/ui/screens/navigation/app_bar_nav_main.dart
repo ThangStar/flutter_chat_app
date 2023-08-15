@@ -55,12 +55,14 @@ class _AppBarNavMainState extends State<AppBarNavMain>
           NotificationService.showNoti(
               message.idUserSend, flutterLocalNotificationsPlugin,
               (String messageInput) {
-            socket.emit("messageFromClient", {
-              'message': messageInput,
-              'idUserGet': message.idUserSend,
-              'idUserSend': prf.id.toString(),
-              'dateTime': DateTime.now().toIso8601String()
-            });
+            if (socket.connected) {
+              socket.emit("messageFromClient", {
+                'message': messageInput,
+                'idUserGet': message.idUserSend,
+                'idUserSend': prf.id,
+                'dateTime': DateTime.now().toIso8601String()
+              });
+            }
           }, {
             "notification": {"title": "Tin nhắn mới", "body": message.message},
             "data": {"routing": "Routing"}

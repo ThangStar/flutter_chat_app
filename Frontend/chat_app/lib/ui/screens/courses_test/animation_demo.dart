@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:seller_app/ui/screens/courses_test/model/task.dart';
 
 class AnimationDemo extends StatefulWidget {
   const AnimationDemo({super.key});
@@ -7,75 +9,36 @@ class AnimationDemo extends StatefulWidget {
   State<AnimationDemo> createState() => _AnimationDemoState();
 }
 
-class _AnimationDemoState extends State<AnimationDemo>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  late Animation<double> _anim;
-  late bool isLarge;
-
-  @override
-  void initState() {
-    super.initState();
-
-    isLarge = true;
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2200));
-    _anim = Tween<double>(begin: 500, end: 0).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.bounceOut))
-      ..addListener(() {});
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
+class _AnimationDemoState extends State<AnimationDemo> {
+  final listData = ["Orange", "Apple", "Lemon"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("animation demo"),
-      ),
-      body: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                if (isLarge) {
-                  _animationController.reverse();
-                } else {
-                  _animationController.forward();
-                }
-                setState(() {
-                  isLarge = !isLarge;
-                });
-              },
-              child: Text("$isLarge")),
-          Expanded(
-              child: Container(
-            width: _anim.value,
-            decoration: const BoxDecoration(color: Colors.green),
-          )),
-          Expanded(
-              child: Container(
-            height: 100,
-            decoration: const BoxDecoration(color: Colors.grey),
-          )),
-          Expanded(
-              child: TweenAnimationBuilder(
-            curve: Curves.bounceOut,
-            tween: Tween<double>(begin: 0, end: 1000),
-            duration: const Duration(milliseconds: 200),
-            builder: (BuildContext context, double value, Widget? child) {
-              return Container(
-                width: value,
-                decoration: const BoxDecoration(color: Colors.grey),
-              );
-            },
-          )),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text("this is title"),
+        ),
+        body: Column(
+          children: [
+            Container(
+              height: 500,
+              child: ListView.builder(
+                itemCount: listData.length,
+                itemBuilder: (context, index) {
+                  String item = listData[index];
+                  return ListTile(
+                    onTap: () {
+                    },
+                    leading: Icon(Icons.abc),
+                    title: Text(item),
+                  )
+                      .animate(
+                        delay: (index * 300 - 100).ms)
+                      .moveX(begin: -200, duration: 800.ms, curve: Curves.bounceOut)
+                      .fade(duration: 800.ms);
+                },
+              ),
+            ),
+          ],
+        ));
   }
 }

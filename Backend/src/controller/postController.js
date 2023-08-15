@@ -10,7 +10,8 @@ const pathCache = require("../storage/cache.storage");
 const addPost = async (req, res) => {
      const { title, content, idUser, style_color } = req.body
      console.log("POST VALUE", req.body);
-     const images = req.files.map(e => e.filename).join(',') | ""
+     const images = req.files.map(e => e.filename).join(',')
+     console.log(images);
      conn.query(addAPost, [idUser, title, images, content, style_color], (err, rs, field) => {
           if (err) {
                res.status(400).send(toJson({

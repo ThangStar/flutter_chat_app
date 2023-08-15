@@ -43,7 +43,7 @@ module.exports = {
                     console.log("data send", data);
                     const message =
                     {
-                         idUserSend: data.idUserSend,
+                         idUserSend: Number(data.idUserSend),
                          idUserGet: data.idUserGet,
                          message: data.message,
                     }

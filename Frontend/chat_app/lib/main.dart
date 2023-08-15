@@ -8,6 +8,7 @@ import 'package:seller_app/ui/blocs/person_chated/person_chatted_bloc.dart';
 import 'package:seller_app/ui/blocs/post/post_bloc.dart';
 import 'package:seller_app/ui/blocs/profile/profile_bloc.dart';
 import 'package:seller_app/ui/blocs/search/search_bloc.dart';
+import 'package:seller_app/ui/screens/courses_test/animation_demo.dart';
 import 'package:seller_app/ui/screens/login_screen.dart';
 import 'package:seller_app/ui/theme/color_schemes.dart';
 import 'package:seller_app/ui/theme/text_theme.dart';
